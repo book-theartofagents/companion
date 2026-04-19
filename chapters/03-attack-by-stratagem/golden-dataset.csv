@@ -1,0 +1,13 @@
+query_id,query,expected_category,expected_specialist,first_draft_passes,expected_iterations,expected_end_state
+Q-001,Find the design doc for session timeout,retrieval,retrieval_specialist,true,1,approved
+Q-002,Summarise what we decided about rate limits last quarter,synthesis,synthesis_specialist,true,1,approved
+Q-003,What did we learn from the payment retry incident,synthesis,synthesis_specialist,false,2,approved
+Q-004,Pull the RFC about BYOK key rotation,retrieval,retrieval_specialist,true,1,approved
+Q-005,Explain why we picked DuckDB over ClickHouse,synthesis,synthesis_specialist,false,2,approved
+Q-006,Get the schema for the proefballon learnings table,retrieval,retrieval_specialist,true,1,approved
+Q-007,Do we still care about the 2024 roadmap,clarification,clarification_specialist,true,1,approved
+Q-008,What,clarification,clarification_specialist,true,1,approved
+Q-009,Compare last quarter and this quarter experiment yield,synthesis,synthesis_specialist,false,3,approved
+Q-010,List the open proefballonnen in the commons,retrieval,retrieval_specialist,true,1,approved
+Q-011,Why did the churn experiment get composted,synthesis,synthesis_specialist,false,2,approved
+Q-012,Something about the thing that broke on Tuesday,clarification,clarification_specialist,true,1,approved

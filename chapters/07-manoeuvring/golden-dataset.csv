@@ -1,0 +1,11 @@
+workflow_id,scenario,fail_on_step,failure_kind,expected_outcome,expected_retries,expected_replay
+wf_001,happy path,,none,completed,0,false
+wf_002,transient failure recovers,draft,transient_timeout,completed,2,false
+wf_003,worker crash after classify,classify,worker_crash,completed,0,true
+wf_004,worker crash during draft,draft,worker_crash,completed,0,true
+wf_005,permanent failure short-circuits,draft,permanent_invalid_input,failed,0,false
+wf_006,human approval signal,review,awaiting_signal,completed,0,false
+wf_007,ttl exceeded visible failure,review,ttl_exceeded,failed_ttl,0,false
+wf_008,fallback model after primary timeout,draft,primary_timeout_fallback,completed,1,false
+wf_009,rate limit backs off with jitter,draft,rate_limit,completed,2,false
+wf_010,classify succeeds on second attempt,classify,transient_timeout,completed,1,false

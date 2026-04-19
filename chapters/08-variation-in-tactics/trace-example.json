@@ -1,0 +1,63 @@
+{
+  "trace_id": "trace_ch08_solo_001",
+  "task_id": "T001",
+  "task": "Summarise recent activity for alice@example.com",
+  "formation": "solo",
+  "strands_call": "Agent(model='anthropic.claude-opus-4-7', tools=[fetch_user, fetch_recent_orders])",
+  "spans": [
+    {
+      "span_id": "span_001",
+      "parent_span_id": null,
+      "name": "agent.loop",
+      "start": "2026-04-19T10:20:00.000Z",
+      "end": "2026-04-19T10:20:01.880Z",
+      "metadata": {"formation": "solo", "model": "claude-opus-4-7"}
+    },
+    {
+      "span_id": "span_002",
+      "parent_span_id": "span_001",
+      "name": "tool.fetch_user",
+      "start": "2026-04-19T10:20:00.280Z",
+      "end": "2026-04-19T10:20:00.420Z",
+      "metadata": {"mcp_server": "support.tools", "tool": "fetch_user"}
+    },
+    {
+      "span_id": "span_003",
+      "parent_span_id": "span_001",
+      "name": "tool.fetch_recent_orders",
+      "start": "2026-04-19T10:20:00.430Z",
+      "end": "2026-04-19T10:20:00.720Z",
+      "metadata": {"mcp_server": "support.tools", "tool": "fetch_recent_orders"}
+    },
+    {
+      "span_id": "span_004",
+      "parent_span_id": "span_001",
+      "name": "generation",
+      "kind": "generation",
+      "start": "2026-04-19T10:20:00.740Z",
+      "end": "2026-04-19T10:20:01.870Z",
+      "metadata": {
+        "model": "claude-opus-4-7",
+        "prompt_version": "v2",
+        "cost_usd": 0.034,
+        "cache_hit": true
+      },
+      "usage": {"input_tokens": 420, "output_tokens": 180}
+    }
+  ],
+  "totals": {
+    "formation": "solo",
+    "latency_ms": 1880,
+    "input_tokens": 420,
+    "output_tokens": 180,
+    "cost_usd": 0.034,
+    "coordination_overhead_tokens": 0,
+    "quality_score": 0.92
+  },
+  "comparison": {
+    "solo":      {"latency_ms": 1880, "cost_usd": 0.034, "quality": 0.92},
+    "pipeline":  {"latency_ms": 4800, "cost_usd": 0.11,  "quality": 0.91},
+    "swarm":     {"latency_ms": 3200, "cost_usd": 0.18,  "quality": 0.92},
+    "hierarchy": {"latency_ms": 5900, "cost_usd": 0.26,  "quality": 0.91}
+  }
+}

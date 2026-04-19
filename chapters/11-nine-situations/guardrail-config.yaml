@@ -1,0 +1,98 @@
+# Guardrails for the nine failure modes.
+# Two layers, mapped to the two projects in the chapter:
+#   - Guardrails AI: per-field input/output validators.
+#   - NeMo Guardrails: dialogue-level rails in a Colang-style shape.
+# A third slice is in-process policy: circuit breakers, progress detection,
+# transaction boundaries. These belong to the orchestrator, not to either library.
+
+guardrails_ai:
+  validators:
+    - name: prompt_injection
+      kind: InputClassifier
+      on_fail: abort
+      applies_to: user_input
+      fires_on: adversarial_input
+    - name: output_length
+      kind: ValidLength
+      params:
+        min: 20
+        max: 1200
+      on_fail: fix
+    - name: output_pii_redaction
+      kind: PII
+      on_fail: rewrite
+    - name: output_validator_vs_ground_truth
+      kind: SemanticSimilarity
+      params:
+        reference: ground_truth_set
+        threshold: 0.82
+      on_fail: escalate
+      fires_on: silent_wrong_answer
+
+nemo_guardrails:
+  flows:
+    - name: clarify_ambiguous
+      trigger: intent.ambiguous_two_targets
+      action: ask_clarifying_question
+      max_clarifications: 2
+      fires_on: ambiguous_input
+    - name: refuse_off_topic
+      trigger: intent.off_topic
+      action: refuse_politely
+
+orchestrator_policies:
+  tool_registry:
+    precedence_order:
+      - ledger_api
+      - crm_api
+    on_conflict: abort_with_precedence_note
+    fires_on: conflicting_tools
+
+  tool_schema_whitelist:
+    strict: true
+    on_unknown_tool: abort
+    fires_on: hallucinated_action
+
+  token_guard:
+    max_input_tokens: 2000
+    on_overflow: summarise_and_retry
+    max_summarise_retries: 1
+    fires_on: context_overflow
+
+  circuit_breaker:
+    per_tool: true
+    open_after_failures: 3
+    half_open_after_seconds: 30
+    fires_on: cascading_failure
+
+  progress_detector:
+    plan_hash_window: 3
+    action_on_repeat: abort
+    fires_on: infinite_loop
+
+  transaction_boundary:
+    two_phase: true
+    compensate_on_partial: true
+    fires_on: partial_success
+
+  cost_budget:
+    max_usd_per_request: 0.50
+    max_steps_per_request: 8
+    action_on_breach: abort
+
+rules:
+  - name: every-failure-classified
+    type: trace_field_required
+    field: failure_mode
+    action: reject
+    message: "Trace missing failure_mode field. Every served response must classify."
+  - name: named-guardrail-required
+    type: trace_field_required
+    field: guardrail_fired
+    action: reject
+    message: "Trace missing guardrail_fired field. 'Nothing fired' is a valid value but the field is not optional."
+  - name: no-generic-apology
+    type: regex
+    pattern: "(?i)\\bI cannot help with that\\b"
+    action: reject
+    message: "Generic apology detected. Replace with a mode-specific response. See Ch. 11 on the fail-open handler."

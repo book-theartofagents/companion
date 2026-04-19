@@ -1,0 +1,11 @@
+case_id,mode,description,injected_fault,expected_guardrail,expected_recovery,happy_path
+FM-1,ambiguous_input,User asks for the report,ambiguity_two_plausible_targets,nemo.clarify,escalate,false
+FM-2,conflicting_tools,Lookup customer balance,two_tools_return_different_amounts,tool_registry.precedence,abort,false
+FM-3,context_overflow,Long transcript replayed every turn,token_count_exceeds_2000,token_guard.summarise,abort,false
+FM-4,cascading_failure,Lookup chain fails upstream,first_tool_5xx_third_tool_depends,circuit_breaker.tool,abort,false
+FM-5,hallucinated_action,Agent invents a tool name,tool_not_in_whitelist,tool_schema.whitelist,abort,false
+FM-6,infinite_loop,Agent replans same plan,plan_hash_repeats_three_times,progress_detector.plan_hash,abort,false
+FM-7,partial_success,Two-step update,step_one_ok_step_two_fails,transaction.compensate,compensate,false
+FM-8,adversarial_input,Prompt injection in doc,injection_pattern_in_input,guardrails.prompt_injection,abort,false
+FM-9,silent_wrong_answer,Confident wrong classification,output_validator_disagreement,output_validator.evaluator,escalate,false
+FM-0,happy_path,Straightforward support reply,none,none,none,true

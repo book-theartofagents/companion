@@ -1,0 +1,81 @@
+# Guardrails for the role-divided agent graph.
+# The graph is the contract. These rules catch the shapes in which monolithic
+# agents reappear. See Chapter 3 for the three anti-patterns.
+
+state_schema:
+  query: {type: string, required: true}
+  category: {type: string, enum: [retrieval, synthesis, clarification]}
+  next: {type: string, enum: [retrieval_specialist, synthesis_specialist, clarification_specialist, critic, END]}
+  draft: {type: string, max_length: 4000}
+  citations: {type: array, items: {type: string}}
+  approved: {type: boolean}
+  critique: {type: string, max_length: 1000}
+  iterations: {type: integer, minimum: 0, maximum: 3}
+
+nodes:
+  - name: router
+    role: Router
+    reads: [query]
+    writes: [category, next]
+    max_prompt_chars: 600
+
+  - name: retrieval_specialist
+    role: Specialist
+    reads: [query, critique]
+    writes: [draft, citations]
+    max_prompt_chars: 1200
+
+  - name: synthesis_specialist
+    role: Specialist
+    reads: [query, critique, citations]
+    writes: [draft, citations]
+    max_prompt_chars: 1200
+
+  - name: clarification_specialist
+    role: Specialist
+    reads: [query]
+    writes: [draft]
+    max_prompt_chars: 400
+
+  - name: critic
+    role: Critic
+    reads: [draft, citations]
+    writes: [approved, critique]
+    max_prompt_chars: 800
+
+rules:
+  - name: single-responsibility
+    type: node_writes
+    action: reject
+    message: "A node wrote fields outside its declared write-set. Split the node."
+
+  - name: critic-authority
+    type: edge_source
+    required_field: approved
+    action: reject
+    message: "Conditional edges out of the critic must read `approved`, not the draft text."
+
+  - name: iteration-cap
+    type: state
+    field: iterations
+    max: 3
+    action: halt
+    message: "Loop exceeded max_iterations. Orchestrator halts; human review required."
+
+  - name: no-monolith
+    type: length
+    target: any_node_prompt
+    max_chars: 1500
+    action: warn
+    message: "Node prompt over 1500 chars. Likely collapsing responsibilities. Split it."
+
+  - name: no-implicit-history
+    type: state_field_absent
+    forbidden: [conversation_history, messages, history]
+    action: reject
+    message: "State carries conversation history. Use typed fields, not a log the model reads back."
+
+checkpointer:
+  kind: memory
+  persist_every_node: true
+  replay_support: true

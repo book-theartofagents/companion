@@ -1,0 +1,13 @@
+case_id,user_id,tenant_id,scopes,token_expires_in_s,doc_id,doc_tenant,doc_classification,doc_contains_pii,expected_decision,expected_reason
+TC-001,u_alice,t_orion,docs.read,1800,doc_public_faq,t_orion,public,false,allow,scope_and_tenant_ok
+TC-002,u_alice,t_orion,docs.read,1800,doc_internal_policy,t_orion,internal,false,allow,scope_and_tenant_ok
+TC-003,u_alice,t_orion,docs.read,1800,doc_confidential_plan,t_orion,confidential,false,refuse,classification_above_clearance
+TC-004,u_bob,t_orion,docs.read docs.confidential,1800,doc_confidential_plan,t_orion,confidential,false,allow,clearance_matches
+TC-005,u_alice,t_orion,docs.read,1800,doc_neighbour_contract,t_pallas,internal,false,refuse,tenant_mismatch
+TC-006,u_alice,t_orion,docs.read,1800,doc_hr_profile,t_orion,internal,true,allow_redacted,pii_redacted
+TC-007,u_hr,t_orion,docs.read pii.read,1800,doc_hr_profile,t_orion,internal,true,allow,scope_and_tenant_ok
+TC-008,u_alice,t_orion,docs.read,60,doc_internal_policy,t_orion,internal,false,refuse,token_near_expiry
+TC-009,u_guest,t_orion,,1800,doc_public_faq,t_orion,public,false,refuse,missing_scope
+TC-010,u_auditor,t_orion,audit.read,1800,doc_audit_log,t_orion,restricted,false,allow,audit_scope_matches
+TC-011,u_alice,t_orion,docs.read,1800,doc_missing,t_orion,internal,false,refuse,document_not_found
+TC-012,u_bob,t_orion,docs.read docs.confidential,1800,doc_hr_profile,t_orion,internal,true,allow_redacted,pii_redacted

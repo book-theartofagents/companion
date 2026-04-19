@@ -1,0 +1,28 @@
+project,event_date,event_type,detail,governance,bus_factor
+LangChain,2022-10-24,launch,initial release,community,high
+LangChain,2024-05-14,pivot,messaging shifts toward LangGraph,independent_vendor,high
+LangGraph,2024-01-30,launch,graph-based successor to chain abstractions,independent_vendor,high
+AutoGen,2023-08-22,launch,Microsoft Research release,vendor_research,medium
+AutoGen,2026-04-07,absorbed,consolidated into Microsoft Agent Framework 1.0,vendor_platform,medium
+SemanticKernel,2023-03-07,launch,Microsoft platform SDK,vendor_platform,medium
+SemanticKernel,2026-04-07,absorbed,consolidated into Microsoft Agent Framework 1.0,vendor_platform,medium
+MicrosoftAgentFramework,2026-04-07,launch,unifies AutoGen and Semantic Kernel,vendor_platform,medium
+LlamaIndex,2023-01-10,launch,RAG framework,community,medium
+LlamaIndex,2025-06-02,pivot,repositions as document agent and OCR platform,independent_vendor,medium
+DSPy,2023-07-01,launch,Stanford NLP release,academic,medium
+DSPy,2025-09-15,people_move,Omar Khattab joins MIT and Databricks,academic_and_vendor,medium
+Ragas,2023-09-10,launch,RAG evaluation metrics library,community,medium
+Ragas,2024-11-20,commercial,Ragas Cloud launched by Exploding Gradients,independent_vendor,medium
+TruLens,2023-05-16,launch,LLM observability,community,medium
+TruLens,2024-08-01,acquired,Snowflake AI Observability adopts TruLens,vendor_platform,low
+Langflow,2023-02-12,launch,drag and drop builder,community,medium
+Langflow,2025-04-22,acquired,IBM DataStax acquisition,vendor_platform,low
+Aider,2023-04-25,launch,terminal AI coding assistant,solo_maintainer,low
+Instructor,2023-06-18,launch,typed structured output wrapper,solo_maintainer,low
+Instructor,2024-10-01,absorbed,structured output goes native in OpenAI SDK,vendor_platform,low
+Rebuff,2023-03-01,launch,prompt injection defence,community,low
+Rebuff,2025-05-10,deprecated,Protect AI archives repository points at LLM Guard,community,low
+LLMGuard,2024-01-15,launch,successor to Rebuff broader scope,independent_vendor,medium
+MCP,2024-11-25,launch,Anthropic Model Context Protocol,single_vendor,high
+MCP,2025-05-13,adoption,OpenAI and Google ship MCP support,multi_vendor,high
+MCP,2025-12-02,protocol,Linux Foundation donation under Agentic AI Foundation,standards_body,high

@@ -1,0 +1,81 @@
+# Formation guardrails for the four Strands primitives.
+# The shape is a named call at the call site. These rules enforce that
+# the shape matches the work.
+
+sdk:
+  name: strands
+  version: "1.4.0"
+  provider_agnostic: true
+  mcp_native: true
+  otel_default: true
+
+formations:
+  solo:
+    api: Agent
+    default_model: claude-opus-4-7
+    use_when: single well-tooled agent handles the task
+    budget_usd_per_call: 0.05
+
+  pipeline:
+    api: Workflow
+    stages_min: 2
+    use_when: sequential transformations with narrow contracts
+    budget_usd_per_call: 0.15
+
+  swarm:
+    api: Swarm
+    parallelism_min: 2
+    use_when: independent sub-problems merged at the end
+    budget_usd_per_call: 0.30
+
+  hierarchy:
+    api: Graph
+    planner_required: true
+    use_when: genuinely decomposable work with a strong planner
+    budget_usd_per_call: 0.50
+
+rules:
+  - name: solo-is-default
+    type: policy
+    action: require_justification
+    message: "Multi-agent formations must name the work that justifies them. Solo is the default."
+
+  - name: formation-at-call-site
+    type: required_call
+    allowed: [Agent, Workflow, Swarm, Graph]
+    action: reject
+    message: "The formation must be a named primitive at the call site. No hidden orchestration."
+
+  - name: no-premature-swarm
+    type: metric
+    metric: coordination_overhead_ratio
+    threshold: 0.5
+    action: reject
+    message: "Swarm coordination overhead exceeds 50% of total tokens. The work does not parallelise."
+
+  - name: no-soup
+    type: static_check
+    scope: multi_agent
+    required_fields: [termination_condition, shared_contract]
+    action: reject
+    message: "Undifferentiated multi-agent soup detected. Name the termination condition and the shared contract."
+
+  - name: pipeline-needs-order
+    type: static_check
+    applies_to: Workflow
+    required_fields: [stages, stage_inputs, stage_outputs]
+    action: reject
+    message: "Pipeline stages must declare their inputs and outputs. Implicit contracts produce silent drift."
+
+  - name: hierarchy-needs-planner
+    type: required_field
+    field: planner
+    applies_to: Graph
+    action: reject
+    message: "Hierarchy without a load-bearing planner is a swarm with extra ceremony."
+
+  - name: budget-at-call-site
+    type: metadata
+    key: formation_budget_usd
+    action: enforce
+    message: "Every formation declares its per-call budget. The bill is the audit of the formation choice."

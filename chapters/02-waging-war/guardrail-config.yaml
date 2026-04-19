@@ -1,0 +1,64 @@
+# Gateway config in the LiteLLM shape from Chapter 2.
+# Applied at the gateway layer, not in application code. Application code
+# calls the virtual key. The policy lives here.
+
+model_list:
+  - model_name: claude-primary
+    litellm_params:
+      model: anthropic/claude-opus-4-7
+      api_key: os.environ/ANTHROPIC_API_KEY
+      max_tokens: 500
+
+  - model_name: claude-fallback
+    litellm_params:
+      model: bedrock/anthropic.claude-sonnet-4-7
+      aws_region_name: eu-west-1
+      max_tokens: 500
+
+  - model_name: openai-fallback
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/OPENAI_API_KEY
+      max_tokens: 500
+
+router_settings:
+  fallbacks:
+    - claude-primary: [claude-fallback, openai-fallback]
+  cache: true
+  cache_params:
+    type: redis
+    host: os.environ/REDIS_HOST
+    ttl: 3600
+  routing_strategy: cost-based-routing
+
+rules:
+  - name: max-input-tokens
+    type: length
+    max_tokens: 2000
+    action: reject
+    message: "Input exceeds 2000 tokens. Summarise history first."
+
+  - name: cache-prefix-required
+    type: contains
+    value: "cache_key="
+    action: warn
+    message: "Call is missing a cache key. Cache hit rate will drop."
+
+  - name: sql-shape-router
+    type: regex
+    pattern: "(total|sum|count|list|top \\d+|which |how many)"
+    action: route
+    target: duckdb
+    message: "Analytical query. Route to SQL, not the LLM."
+
+  - name: budget-cap
+    type: metadata
+    key: monthly_usd
+    condition: "> 500"
+    action: reject
+    message: "User exceeds monthly USD 500 cap. Reject until next cycle."
+
+general_settings:
+  max_budget: 5000
+  budget_duration: 30d
+  telemetry: langfuse

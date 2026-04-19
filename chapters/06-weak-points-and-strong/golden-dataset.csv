@@ -1,0 +1,13 @@
+trace_id,feature,user_id,model,prompt_version,input_tokens,output_tokens,latency_ms,cost_usd,cache_hit,fallback_used,evaluator_label,evaluator_score
+trace_001,support.answer,user_42,claude-opus-4-7,v12,320,180,820,0.021,true,,correct,0.94
+trace_002,support.answer,user_42,claude-opus-4-7,v12,295,160,760,0.019,true,,correct,0.92
+trace_003,support.answer,user_17,claude-opus-4-7,v12,340,210,910,0.024,true,,correct,0.91
+trace_004,support.answer,user_17,claude-sonnet-4-7,v12,340,220,610,0.009,false,claude-sonnet-4-7,correct,0.87
+trace_005,support.answer,user_88,claude-opus-4-7,v12,310,200,1120,0.023,false,,incorrect,0.41
+trace_006,research.wiki,user_42,claude-opus-4-7,v4,1840,260,2100,0.044,false,,correct,0.90
+trace_007,research.wiki,user_42,claude-opus-4-7,v4,1920,280,2240,0.046,true,,correct,0.88
+trace_008,research.wiki,user_17,claude-opus-4-7,v4,2010,320,2410,0.050,false,,correct,0.86
+trace_009,ops.qa,user_42,duckdb,,0,0,140,0.010,true,,correct,1.00
+trace_010,ops.qa,user_42,duckdb,,0,0,130,0.010,true,,correct,1.00
+trace_011,support.answer,user_99,claude-opus-4-7,v11,360,220,2300,0.027,false,,correct,0.93
+trace_012,support.answer,user_99,claude-opus-4-7,v11,350,200,980,0.024,false,,incorrect,0.38

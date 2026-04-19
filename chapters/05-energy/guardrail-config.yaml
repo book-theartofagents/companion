@@ -1,0 +1,86 @@
+# MCP tool registry and guardrails.
+# The MCP spec covers the wire format. The discipline of narrow, typed,
+# bounded tools lives with the server author, not with the protocol.
+
+protocol:
+  name: mcp
+  version: "2025-06"
+  transport: stdio   # HTTP or WebSocket also valid; see Ch. 5
+
+tools:
+  - name: get_order_status
+    description: "Fetch status for a single order by id. Returns status, last updated, and a pointer to the order detail resource."
+    input_schema:
+      type: object
+      required: [order_id]
+      properties:
+        order_id: {type: string, pattern: "^ORD-[0-9]{4}$"}
+    output_max_tokens: 200
+    errors: [OrderNotFound, InvalidOrderId]
+
+  - name: search_tickets_by_status
+    description: "List tickets matching a status. Returns up to max_rows summary rows, each with a pointer for deeper reads."
+    input_schema:
+      type: object
+      required: [status]
+      properties:
+        status: {type: string, enum: [open, in_progress, triage, resolved, closed]}
+        max_rows: {type: integer, minimum: 1, maximum: 20, default: 5}
+    output_max_tokens: 800
+    errors: [InvalidStatus]
+
+  - name: get_customer_profile
+    description: "Fetch a customer profile by id. Returns name, tier, last active, and a pointer to the account resource."
+    input_schema:
+      type: object
+      required: [customer_id]
+      properties:
+        customer_id: {type: string, pattern: "^cust-[0-9]{4}$"}
+    output_max_tokens: 300
+    errors: [CustomerNotFound, InvalidCustomerId]
+
+  - name: escalate_ticket
+    description: "Escalate a ticket to the next tier. Returns the new tier or raises on unknown ticket."
+    input_schema:
+      type: object
+      required: [ticket_id]
+      properties:
+        ticket_id: {type: string, pattern: "^TCK-[0-9]{4}$"}
+    output_max_tokens: 150
+    errors: [TicketNotFound, InvalidTicketId]
+
+rules:
+  - name: whitelist-dispatch
+    type: tool_registry
+    action: refuse_unknown
+    message: "Dispatcher refuses any tool name not in the registry. Hallucinated tool calls fail fast."
+
+  - name: no-firehose
+    type: output_bound
+    max_tokens_per_call: 2000
+    action: reject
+    message: "Tool output over 2000 tokens. Return a summary plus a pointer; do not dump the dataset."
+
+  - name: no-single-string-tool
+    type: input_shape
+    forbidden_signature: "single_string_param"
+    action: reject
+    message: "A tool with one free-form `query` or `input` string parameter is a firehose in disguise. Split into typed parameters."
+
+  - name: no-silent-success
+    type: error_contract
+    required: true
+    action: reject
+    message: "Tool must raise a typed error on failure. Returning {ok: true} on a failed write is the silent-success anti-pattern."
+
+  - name: informative-errors
+    type: error_shape
+    forbidden_values: ["500 internal server error", "error", "failed"]
+    action: warn
+    message: "Error messages must be actionable. `OrderNotFound(order_id=...)` beats `500 internal server error`."
+
+  - name: description-first
+    type: tool_name
+    min_signal_chars: 10
+    action: warn
+    message: "Tool name must carry signal. `api_call_17` loses; `escalate_ticket` wins."

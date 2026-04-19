@@ -1,0 +1,43 @@
+{
+  "trace_id": "trace_ch09_canary_042",
+  "request_id": "REQ-009",
+  "input": "Invoice missing VAT ID for EU tenant",
+  "served_by": "v2",
+  "shadow_mirrored": "v1",
+  "stage": "canary",
+  "workflow_version": "wf_support_triage_v2_2026_04_14",
+  "routes": {
+    "served": {
+      "label": "billing",
+      "reply_tokens": 150,
+      "model": "anthropic.claude-opus-4-7",
+      "model_snapshot": "2026-04-11",
+      "prompt_ref": "support.triage.v12"
+    },
+    "shadow": {
+      "label": "billing",
+      "reply_tokens": 250,
+      "model": "anthropic.claude-opus-4-7",
+      "model_snapshot": "2026-04-11",
+      "prompt_ref": "support.triage.v11"
+    }
+  },
+  "comparison": {
+    "label_agreement": true,
+    "length_delta": -100,
+    "length_delta_relative": -0.40
+  },
+  "feedback": {
+    "thumbs_down": true,
+    "reason": "answer too terse; missing VAT field guidance"
+  },
+  "platform": "dify",
+  "gateway": "litellm",
+  "metadata": {
+    "canary_percent": 10,
+    "thumbs_down_rate_30m": 0.09,
+    "shadow_disagreement_rate_1h": 0.12,
+    "rollback_armed": true,
+    "last_rollback_drill_age_days": 7
+  }
+}

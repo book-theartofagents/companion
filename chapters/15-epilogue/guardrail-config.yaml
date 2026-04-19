@@ -1,0 +1,50 @@
+# Guardrails for the readiness scorecard.
+# The checklist in Ch. 15 is not a victory-condition decoration. These rules
+# make the scorecard part of the release gate rather than a report nobody reads.
+
+rules:
+  - name: spec-present
+    type: file
+    path: chapters/*/spec.md
+    min_lines: 5
+    action: warn
+    message: "Chapter has no spec. Write the spec before the prompt. Ch. 15 starter item 1."
+
+  - name: dataset-present
+    type: file
+    path: chapters/*/golden-dataset.csv
+    min_rows: 2
+    action: warn
+    message: "Chapter has no golden dataset. Build one of twenty cases. Ch. 15 starter item 3."
+
+  - name: guardrail-present
+    type: file
+    path: chapters/*/guardrail-config.yaml
+    min_rules: 1
+    action: warn
+    message: "Chapter has no guardrails. Add one at a boundary the model currently owns. Ch. 15 starter item 4."
+
+  - name: trace-present
+    type: file
+    path: chapters/*/trace-example.json
+    requires_fields: [model, gateway, metadata]
+    action: warn
+    message: "Chapter has no trace example. Instrument one pipeline. Ch. 15 starter item 2."
+
+  - name: scorecard-visible
+    type: ci
+    step: readiness_scorecard
+    when: [on_commit, weekly]
+    action: enforce
+    message: "The scorecard runs on every change. A number that is never looked at is not a number."
+
+  - name: no-unspecified-claims
+    type: policy
+    rule: all claims in chapters link to a measurement
+    action: review
+    message: "Victory conditions without measurement are Ch. 15's named failure."
+
+general_settings:
+  audit_mode: read_only
+  exit_on_failure: false
+  output_format: text

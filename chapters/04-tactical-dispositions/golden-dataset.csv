@@ -1,0 +1,13 @@
+ticket_id,ticket_body,first_attempt_shape,expected_category,expected_priority,expected_attempts,expected_outcome
+T-001,Login button throws 500 on Firefox,clean_json,bug,4,1,valid
+T-002,Can we get dark mode in the dashboard,clean_json,feature,2,1,valid
+T-003,How do I reset my SSO password,clean_json,question,2,1,valid
+T-004,BUY CHEAP SUNGLASSES NOW,clean_json,noise,1,1,valid
+T-005,Payment webhook retries are flooding our logs,markdown_fenced_json,bug,5,1,valid
+T-006,PDF export drops footnotes on long reports,preamble_then_json,bug,3,1,valid
+T-007,Add a keyboard shortcut for quick search,invalid_category,feature,2,2,valid
+T-008,Two-factor sometimes rejects correct codes,priority_out_of_range,bug,5,2,valid
+T-009,Report a huge problem with everything please,summary_too_long,question,3,2,valid
+T-010,The thing is broken please fix it urgently now immediately today right now,malformed_json,bug,4,2,valid
+T-011,,empty_input,noise,1,0,refused
+T-012,Looks fine,stubborn_garbage,noise,1,3,exhausted

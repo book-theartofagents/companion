@@ -1,0 +1,40 @@
+{
+  "trace_id": "trace_ch14_001",
+  "scenario": "tool call through adapter protocol",
+  "caller_code_changed": false,
+  "implementation_swap": {
+    "from": "framework_alpha",
+    "to": "framework_beta",
+    "changes": ["config: adapter=framework_beta"]
+  },
+  "call": {
+    "protocol": "mcp_tool_call_v1",
+    "tool": "search_orders",
+    "arguments": {"customer_id": 42, "since": "2026-01-01"}
+  },
+  "response_from_alpha": {
+    "rows": 3,
+    "latency_ms": 210,
+    "schema_version": "v1"
+  },
+  "response_from_beta": {
+    "rows": 3,
+    "latency_ms": 180,
+    "schema_version": "v1"
+  },
+  "analyser_report": {
+    "projects": 14,
+    "active": 5,
+    "acquired": 2,
+    "pivoted": 2,
+    "absorbed": 3,
+    "deprecated": 1,
+    "protocol": 1,
+    "bus_factor_low": 5
+  },
+  "metadata": {
+    "mcp_version": "1.0.0",
+    "governance": "standards_body",
+    "commons_write": "pattern.adapter-protocol.v1"
+  }
+}

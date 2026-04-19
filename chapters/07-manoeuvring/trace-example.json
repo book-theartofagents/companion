@@ -1,0 +1,46 @@
+{
+  "workflow_id": "wf_ch07_004",
+  "workflow_type": "SupportAgentWorkflow",
+  "task_queue": "support-triage",
+  "run_timeout_seconds": 3600,
+  "input": {
+    "ticket_id": "tkt_9013",
+    "subject": "Invoice doesn't match my order",
+    "user_id": "user_17"
+  },
+  "event_history": [
+    {"event_id": 1, "type": "WorkflowExecutionStarted", "attributes": {"worker": "worker-a"}},
+    {"event_id": 2, "type": "ActivityTaskScheduled", "activity": "classify", "attempt": 1},
+    {"event_id": 3, "type": "ActivityTaskStarted", "activity": "classify", "worker": "worker-a"},
+    {"event_id": 4, "type": "ActivityTaskCompleted", "activity": "classify", "result": {"category": "billing"}},
+    {"event_id": 5, "type": "ActivityTaskScheduled", "activity": "draft", "attempt": 1},
+    {"event_id": 6, "type": "ActivityTaskStarted", "activity": "draft", "worker": "worker-a"},
+    {"event_id": 7, "type": "WorkerLost", "worker": "worker-a", "reason": "kernel_patch_restart"},
+    {"event_id": 8, "type": "ActivityTaskTimedOut", "activity": "draft", "attempt": 1},
+    {"event_id": 9, "type": "ActivityTaskScheduled", "activity": "draft", "attempt": 2},
+    {"event_id": 10, "type": "ActivityTaskStarted", "activity": "draft", "worker": "worker-b"},
+    {"event_id": 11, "type": "ActivityTaskCompleted", "activity": "draft", "result": {"draft_ref": "draft_8821"}},
+    {"event_id": 12, "type": "ActivityTaskScheduled", "activity": "review", "attempt": 1},
+    {"event_id": 13, "type": "ActivityTaskCompleted", "activity": "review", "result": {"queued_for": "agent_h1"}},
+    {"event_id": 14, "type": "WorkflowWaitForSignal", "signal": "approve", "timeout_seconds": 86400},
+    {"event_id": 15, "type": "SignalReceived", "signal": "approve", "source": "agent_h1"},
+    {"event_id": 16, "type": "WorkflowExecutionCompleted", "result": {"status": "sent", "draft_ref": "draft_8821"}}
+  ],
+  "replay": {
+    "replayed_once": true,
+    "skipped_on_replay": ["classify"],
+    "resumed_at": "draft",
+    "worker_on_replay": "worker-b"
+  },
+  "activities": [
+    {"name": "classify", "attempts": 1, "total_latency_ms": 420, "model": "claude-sonnet-4-7"},
+    {"name": "draft", "attempts": 2, "total_latency_ms": 9120, "model": "claude-opus-4-7"},
+    {"name": "review", "attempts": 1, "total_latency_ms": 120, "model": null}
+  ],
+  "totals": {
+    "latency_ms": 9860,
+    "human_wait_ms": 612000,
+    "cost_usd": 0.038,
+    "status": "completed"
+  }
+}

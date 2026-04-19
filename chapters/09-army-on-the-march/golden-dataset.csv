@@ -1,0 +1,21 @@
+request_id,input,v1_label,v1_reply_len,v2_label,v2_reply_len,thumbs_down
+REQ-001,Password reset loop after MFA,account_access,240,account_access,210,false
+REQ-002,Refund for duplicate subscription charge,billing,260,billing,220,false
+REQ-003,API 502 every 30 seconds for an hour,platform_incident,320,platform_incident,280,false
+REQ-004,Cannot export CSV larger than 1GB,product_limit,280,product_limit,250,false
+REQ-005,Request to delete customer data under GDPR,data_subject_request,400,data_subject_request,390,false
+REQ-006,Sales query about enterprise SSO pricing,sales,230,sales,210,false
+REQ-007,Integration with legacy SFTP partner broken,integration,310,integration,290,false
+REQ-008,Bug report for onboarding checklist,product_bug,290,product_bug,260,false
+REQ-009,Invoice missing VAT ID for EU tenant,billing,250,billing,150,true
+REQ-010,Shared dashboard link returns 403,account_access,260,account_access,240,false
+REQ-011,Anomaly in weekly usage report,product_bug,310,product_bug,280,false
+REQ-012,Feature request for webhook retries,product_request,240,product_request,220,false
+REQ-013,Mobile app crash on iOS 19,platform_incident,290,platform_incident,270,false
+REQ-014,Team seat deprovisioning query,account_access,230,account_access,210,false
+REQ-015,PII in exported logs,data_subject_request,360,data_subject_request,340,false
+REQ-016,Webhook failing with 401 on new tenant,integration,300,integration,280,false
+REQ-017,Rate limit confusion for enterprise plan,product_limit,260,product_limit,240,false
+REQ-018,Billing cycle changed without notice,billing,280,billing,260,false
+REQ-019,Dashboard chart labels truncated,product_bug,250,product_bug,230,false
+REQ-020,Contract renewal timeline,sales,240,sales,220,false

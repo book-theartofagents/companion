@@ -1,0 +1,36 @@
+{
+  "trace_id": "trace_ch11_FM9",
+  "case_id": "FM-9",
+  "request": "Classify invoice INV-4412 against the chart of accounts",
+  "failure_mode": "silent_wrong_answer",
+  "guardrail_fired": "output_validator.evaluator",
+  "recovery": "escalate",
+  "recovery_detail": "queued for reviewer; notify finance on-call; do not autopost to ledger",
+  "agent_output": {
+    "raw": {
+      "cost_centre": "CC-4102-MARKETING",
+      "confidence": 0.91,
+      "reasoning": "Pattern matches prior marketing booking for this supplier."
+    },
+    "validator_check": {
+      "expected_from_ground_truth": "CC-4102-OPERATIONS",
+      "similarity": 0.41,
+      "threshold": 0.82,
+      "verdict": "disagree"
+    }
+  },
+  "tools_called": ["chart_of_accounts.lookup", "supplier_history.query"],
+  "plan_hashes": ["hash_a1"],
+  "tokens": {"input": 820, "output": 180},
+  "cost_usd": 0.017,
+  "step_count": 3,
+  "model": "anthropic.claude-opus-4-7",
+  "model_snapshot": "2026-04-11",
+  "framework": "langgraph",
+  "guardrails_layer": ["guardrails-ai@0.10.0", "nemo-guardrails@0.21.0"],
+  "metadata": {
+    "autopost_blocked": true,
+    "reviewer_queue": "finance_review",
+    "assurance_case_id": "AC-invoice-classification-v2"
+  }
+}

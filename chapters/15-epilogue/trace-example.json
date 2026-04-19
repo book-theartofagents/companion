@@ -1,0 +1,26 @@
+{
+  "trace_id": "trace_ch15_001",
+  "audit": "readiness_scorecard_v1",
+  "scanned_chapters": 13,
+  "fully_ready": 2,
+  "in_progress": 10,
+  "not_started": 1,
+  "overall_readiness": 0.54,
+  "per_chapter": [
+    {"chapter": "01-laying-plans",       "spec": true,  "dataset": true,  "guardrail": true,  "trace": true,  "state": "READY"},
+    {"chapter": "02-waging-war",         "spec": true,  "dataset": true,  "guardrail": true,  "trace": true,  "state": "READY"},
+    {"chapter": "03-attack-by-stratagem","spec": true,  "dataset": true,  "guardrail": true,  "trace": false, "state": "IN_PROGRESS"},
+    {"chapter": "12-attack-by-fire",     "spec": true,  "dataset": true,  "guardrail": true,  "trace": true,  "state": "READY"},
+    {"chapter": "13-use-of-spies",       "spec": true,  "dataset": true,  "guardrail": true,  "trace": true,  "state": "READY"}
+  ],
+  "model": null,
+  "gateway": "filesystem",
+  "tokens": {"input": 0, "output": 0, "cached": 0},
+  "latency_ms": 58,
+  "cost_usd": 0.0,
+  "metadata": {
+    "scanner_version": "v1.0.0",
+    "audit_mode": "read_only",
+    "commons_write": "report.readiness.latest"
+  }
+}

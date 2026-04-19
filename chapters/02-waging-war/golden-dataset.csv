@@ -1,0 +1,11 @@
+question,expected_route,expected_model,expected_input_tokens,expected_cache_hit,expected_cost_usd
+What was total revenue last quarter?,sql,duckdb,0,true,0.01
+Show sales by region and product line,sql,duckdb,0,true,0.01
+Which customers spent over $10k?,sql,duckdb,0,true,0.01
+List orders placed yesterday,sql,duckdb,0,true,0.01
+Top 10 products by revenue,sql,duckdb,0,true,0.01
+Summarise the top three products with reasoning,llm,claude-opus-4-7,280,true,0.02
+How does this quarter compare to last year's trend?,llm,claude-opus-4-7,310,false,0.03
+Explain the customer churn metric,llm,claude-opus-4-7,295,true,0.02
+Draft a note to the team about Q1 performance,llm,claude-opus-4-7,340,false,0.03
+Why did sales drop in the Nordics?,llm,claude-opus-4-7,320,false,0.03

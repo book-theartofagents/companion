@@ -1,0 +1,27 @@
+# Versions pinned to April 2026 releases.
+# Tested against Python 3.12-3.14. Install with: uv pip install -r requirements.txt
+
+# Evaluation + telemetry
+ragas>=0.4.3,<0.5
+langfuse>=4.2.0,<5
+dspy-ai>=3.1.3,<4
+
+# Model gateways and SDKs
+litellm>=1.83.0,<2
+anthropic>=0.60.0,<1
+openai>=2.31.0,<3
+
+# Structured output
+instructor>=1.12.0,<2
+pydantic>=2.12.0,<3
+
+# Data + analytics terrain
+pandas>=3.0.0,<4
+duckdb>=1.3.0,<2
+pyyaml>=6.0.3
+
+# Graph and workflow
+langgraph>=0.6.0,<1
+
+# Datasets utility used by ragas
+datasets>=4.8.0,<5

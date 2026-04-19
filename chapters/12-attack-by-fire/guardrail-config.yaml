@@ -1,0 +1,64 @@
+# Guardrails for the cookbook-first router.
+# The cheapest path that produces the correct answer wins. These rules make
+# the routing visible and the overspend detectable.
+
+rules:
+  - name: cookbook-first
+    type: order
+    sequence: [cookbook, text_to_sql, agent]
+    action: enforce
+    message: "Cookbook before text-to-SQL before agent. No shortcuts to the model."
+
+  - name: cookbook-miss-report
+    type: counter
+    key: cookbook_miss
+    window: 24h
+    threshold: 50
+    action: alert
+    message: "50 cookbook misses in 24h. Candidate queries are recurring. Add to the cookbook."
+
+  - name: agent-rate-ceiling
+    type: rate
+    key: route
+    value: agent
+    max_ratio: 0.30
+    window: 7d
+    action: alert
+    message: "Agent route exceeds 30% of traffic. Cookbook is missing entries."
+
+  - name: no-llm-for-arithmetic
+    type: regex
+    pattern: "\\b(sum|count|average|avg|mean|min|max|total)\\b"
+    and_route: agent
+    action: reject
+    message: "Arithmetic routed to the agent. This belongs in SQL. See Ch. 12 LLM-as-calculator."
+
+  - name: no-llm-for-rules
+    type: regex
+    pattern: "\\b(if|threshold|eligible|tier|discount|pricing)\\b"
+    and_route: agent
+    action: warn
+    message: "Business rule routed to the agent. Wrap the rule in a function, not a prompt."
+
+  - name: sql-inspectable-before-run
+    type: schema
+    schema:
+      type: object
+      required: [sql, executed]
+      properties:
+        sql: {type: string, minLength: 8}
+        executed: {type: boolean}
+    action: enforce
+    message: "Text-to-SQL emits SQL as an inspectable artefact. Execution is a separate step."
+
+  - name: budget-per-feature
+    type: metadata
+    key: feature_monthly_usd
+    condition: "> 500"
+    action: reject
+    message: "Feature spend exceeds monthly cap. Investigate the route distribution."
+
+general_settings:
+  cookbook_path: ./cookbook
+  audit_log: true
+  emit_route_metric: true

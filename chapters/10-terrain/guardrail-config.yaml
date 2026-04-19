@@ -1,0 +1,102 @@
+# Terrain policy for a LlamaIndex-style retrieval agent.
+# Each rule runs at the orchestration layer, before the retrieval tool
+# touches a document or the response reaches the caller.
+
+policies:
+  authentication:
+    token_source: oauth2_delegated
+    issuer: "https://identity.example.com/realms/enterprise"
+    min_remaining_ttl_seconds: 120
+    scoped_tokens_only: true
+    refuse_on_service_account_for_user_data: true
+
+  tenant_isolation:
+    enforcement: row_level_security
+    layer: storage
+    cross_tenant_read: forbidden
+    log_tenant_on_every_retrieval: true
+
+  document_classification:
+    levels: [public, internal, confidential, restricted]
+    # Each classification lists one or more *accepted* scope sets. A caller
+    # is authorised if their presented scopes cover any one of the sets.
+    scope_options:
+      public:
+        - [docs.read]
+      internal:
+        - [docs.read]
+      confidential:
+        - [docs.read, docs.confidential]
+      restricted:
+        - [audit.read]
+        - [docs.read, docs.restricted]
+
+  pii_redaction:
+    enabled: true
+    detectors:
+      - email
+      - phone
+      - national_id
+      - iban
+      - full_name_with_context
+    reveal_requires_scope: pii.read
+    redaction_token: "[REDACTED:{kind}]"
+
+  audit:
+    backend: append_only_log
+    write_before_response: true
+    required_fields:
+      - trace_id
+      - user_id
+      - tenant_id
+      - doc_id
+      - classification
+      - scopes_presented
+      - decision
+      - reason
+      - model_snapshot
+      - retrieval_strategy
+    retention_days: 2555  # 7 years, aligns with ISO/IEC 42001 change-management expectations
+
+rules:
+  - name: no-service-account-for-user-data
+    type: metadata
+    key: token_type
+    condition: "== service_account && user_context"
+    action: reject
+    message: "Service account on a user-facing request. Blast radius too wide. Use delegated tokens."
+
+  - name: tenant-matches
+    type: comparison
+    left: request.tenant_id
+    right: document.tenant_id
+    action: reject_on_mismatch
+    message: "Document belongs to a different tenant. RLS should have blocked this at storage; double check."
+
+  - name: classification-within-scope
+    type: lookup
+    table: policies.document_classification.scope_map
+    action: reject_when_missing_scope
+    message: "Caller lacks the scope required for this classification."
+
+  - name: token-not-near-expiry
+    type: threshold
+    field: token.remaining_ttl_seconds
+    operator: ">="
+    value: 120
+    action: reject
+    message: "Token near expiry. Refresh before retrieval."
+
+  - name: pii-redaction-required
+    type: output_transform
+    condition: "request.scopes does not contain pii.read"
+    transform: redact_pii
+    action: rewrite
+    message: "PII redacted for callers without pii.read scope."
+
+  - name: audit-before-response
+    type: ordering
+    must_precede: response.return
+    source: audit.write
+    action: reject_if_not_written
+    message: "Audit record must be written before the response returns."

@@ -1,0 +1,53 @@
+# Guardrails for the framework ecology analyser.
+# Frameworks will be acquired, pivoted, absorbed, or deprecated. These
+# rules keep the surprise small.
+
+rules:
+  - name: protocol-over-framework
+    type: prefer
+    order: [protocol, adapter, framework]
+    action: enforce
+    message: "Protocols outlast frameworks. Speak MCP at the boundary, not a framework's proprietary calls."
+
+  - name: adapter-required-for-vendor-apis
+    type: layer
+    requires: adapter
+    when_governance: [vendor_platform, vendor_research, single_vendor]
+    action: enforce
+    message: "Vendor APIs sit behind an adapter. Swap the vendor, the adapter absorbs the change."
+
+  - name: bus-factor-flag
+    type: metadata
+    key: bus_factor
+    values: [low]
+    action: warn
+    message: "Project is bus-factor-low. Plan for continuity. See Ch. 14 solo-maintainer note."
+
+  - name: acquisition-signal
+    type: event
+    key: event_type
+    values: [acquired]
+    action: review
+    message: "Acquisition event. Re-read the roadmap. The priorities changed even if the code did not."
+
+  - name: deprecation-successor-required
+    type: schema
+    schema:
+      type: object
+      required: [event_type, detail]
+      properties:
+        event_type: {type: string, enum: [deprecated]}
+        detail: {type: string, pattern: "(points at|successor|migrate)"}
+    action: enforce
+    message: "Deprecation must name a successor. Zombie projects are the anti-pattern."
+
+  - name: standards-body-preferred
+    type: governance
+    preferred: [standards_body, multi_vendor]
+    action: rank
+    message: "A standard with multi-vendor governance is the most durable foundation."
+
+general_settings:
+  protocol_pin: mcp
+  minimum_implementations_for_protocol: 3
+  freshness_window_days: 180

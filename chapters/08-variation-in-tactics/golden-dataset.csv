@@ -1,0 +1,11 @@
+task_id,task,expected_best_formation,notes
+T001,Summarise recent activity for alice@example.com,solo,one well-tooled agent with fetch_user + fetch_recent_orders
+T002,Classify parse validate and store a single invoice,pipeline,sequential transformations with narrow contracts
+T003,Generate three candidate drafts and rank them,swarm,genuinely independent sub-problems merged at the end
+T004,Build a feature that needs frontend backend and data work,hierarchy,decomposable with a planner that splits the work
+T005,Look up a customers last five orders,solo,single tool call fits solo
+T006,Intake classify parse validate store on a steady stream,pipeline,ETL shape with judgement bolted in
+T007,Research across web kb and recent docs for one query,solo,most queries need one source not three
+T008,Draft three openings pick the best and continue,swarm,candidate generation is the swarm case
+T009,Plan a migration with parallel subteams,hierarchy,planner assigns well-defined sub-tasks
+T010,Answer a single product question with docs,solo,retrieval plus one model call fits solo

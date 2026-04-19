@@ -1,0 +1,49 @@
+{
+  "trace_id": "trace_ch05_003",
+  "query_id": "Q-003",
+  "query": "List open tickets in the payments queue",
+  "protocol": "mcp/2025-06",
+  "selector_decision": {
+    "tool_name": "search_tickets_by_status",
+    "reason": "query matches list-by-status shape; enum value `open` present",
+    "model": "claude-sonnet-4-7",
+    "tokens": {"input": 180, "output": 30},
+    "latency_ms": 110
+  },
+  "input_validation": {
+    "tool": "search_tickets_by_status",
+    "validated_by": "pydantic",
+    "args": {"status": "open", "max_rows": 5},
+    "pattern_checks": ["status in {open, in_progress, triage, resolved, closed}"],
+    "accepted": true
+  },
+  "tool_call": {
+    "server": "helpdesk-mcp",
+    "transport": "stdio",
+    "rpc_method": "tools/call",
+    "tool": "search_tickets_by_status",
+    "arguments": {"status": "open", "max_rows": 5},
+    "response": {
+      "count": 5,
+      "rows": [
+        {"ticket_id": "TCK-5510", "title": "Refund webhook 500s", "last_updated": "2026-04-17T09:12:00Z", "pointer": "mcp://helpdesk/ticket/TCK-5510"},
+        {"ticket_id": "TCK-5517", "title": "Duplicate charge on failed checkout", "last_updated": "2026-04-17T08:40:00Z", "pointer": "mcp://helpdesk/ticket/TCK-5517"},
+        {"ticket_id": "TCK-5520", "title": "BYOK provider returns 401 sporadically", "last_updated": "2026-04-17T07:55:00Z", "pointer": "mcp://helpdesk/ticket/TCK-5520"},
+        {"ticket_id": "TCK-5529", "title": "Bank statement export encoding bug", "last_updated": "2026-04-16T17:02:00Z", "pointer": "mcp://helpdesk/ticket/TCK-5529"},
+        {"ticket_id": "TCK-5533", "title": "Retry after idempotency-key collision", "last_updated": "2026-04-16T15:18:00Z", "pointer": "mcp://helpdesk/ticket/TCK-5533"}
+      ],
+      "tokens_used": 640,
+      "bounded_by": "max_rows=5"
+    },
+    "latency_ms": 220,
+    "cost_usd": 0.002
+  },
+  "metadata": {
+    "gateway": "litellm",
+    "registry": "helpdesk-mcp/tools.yaml",
+    "firehose_detected": false,
+    "silent_success_detected": false,
+    "guardrails_fired": [],
+    "next_action_hint": "agent reads pointers; calls get_customer_profile only if a specific ticket requires it"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "trace_id": "trace_ch03_001",
+  "query_id": "Q-003",
+  "query": "What did we learn from the payment retry incident",
+  "graph": "research_assistant_v2",
+  "max_iterations": 3,
+  "final_state": {
+    "category": "synthesis",
+    "draft": "The retry storm on 2026-02-14 was caused by exponential backoff without jitter. Two learnings were promoted to the commons: (1) always jitter retries, (2) cap total retry window at 30s.",
+    "citations": ["learning://payment/retry-storm-2026-02-14", "spec://payment-service/retry-policy.md"],
+    "approved": true,
+    "iterations": 2
+  },
+  "steps": [
+    {
+      "step": 1,
+      "node": "router",
+      "reads": {"query": "What did we learn from the payment retry incident"},
+      "writes": {"category": "synthesis", "next": "synthesis_specialist"},
+      "model": "claude-sonnet-4-7",
+      "tokens": {"input": 180, "output": 20},
+      "latency_ms": 120,
+      "reason": "query contains synthesis trigger: `what did we learn`"
+    },
+    {
+      "step": 2,
+      "node": "synthesis_specialist",
+      "reads": {"query": "...", "critique": null, "citations": []},
+      "writes": {
+        "draft": "The retry storm last month was bad. We should add jitter.",
+        "citations": ["learning://payment/retry-storm-2026-02-14"]
+      },
+      "model": "claude-opus-4-7",
+      "tokens": {"input": 420, "output": 110},
+      "latency_ms": 1240,
+      "reason": "first draft; thin citations; awaiting critic"
+    },
+    {
+      "step": 3,
+      "node": "critic",
+      "reads": {"draft": "...", "citations": ["learning://payment/retry-storm-2026-02-14"]},
+      "writes": {
+        "approved": false,
+        "critique": "Draft names one citation but asserts two learnings. Cite the retry-policy spec that records the 30s cap. Tighten the causal chain: no-jitter -> synchronised retries -> thundering herd."
+      },
+      "model": "claude-sonnet-4-7",
+      "tokens": {"input": 310, "output": 90},
+      "latency_ms": 820,
+      "reason": "faithfulness check failed; specific correction returned"
+    },
+    {
+      "step": 4,
+      "node": "synthesis_specialist",
+      "reads": {"query": "...", "critique": "Draft names one citation..."},
+      "writes": {
+        "draft": "The retry storm on 2026-02-14 was caused by exponential backoff without jitter. Two learnings were promoted to the commons: (1) always jitter retries, (2) cap total retry window at 30s.",
+        "citations": ["learning://payment/retry-storm-2026-02-14", "spec://payment-service/retry-policy.md"]
+      },
+      "model": "claude-opus-4-7",
+      "tokens": {"input": 560, "output": 130},
+      "latency_ms": 1310,
+      "reason": "rewritten with critic feedback; citations aligned with assertions"
+    },
+    {
+      "step": 5,
+      "node": "critic",
+      "reads": {"draft": "...", "citations": ["learning://payment/retry-storm-2026-02-14", "spec://payment-service/retry-policy.md"]},
+      "writes": {"approved": true, "critique": "Citations support each assertion. Approved."},
+      "model": "claude-sonnet-4-7",
+      "tokens": {"input": 320, "output": 25},
+      "latency_ms": 640,
+      "reason": "draft grounded in cited sources; conditional edge exits to END"
+    }
+  ],
+  "metadata": {
+    "checkpointer": "memory",
+    "gateway": "litellm",
+    "total_tokens": {"input": 1790, "output": 375},
+    "total_latency_ms": 4130,
+    "total_cost_usd": 0.048,
+    "guardrails_fired": [],
+    "coverage_note": "Each step persisted. Replay from step 2 reproduces the first draft exactly."
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "trace_id": "trace_ch02_001",
+  "input": "What was total revenue last quarter?",
+  "route": "sql",
+  "reason": "matched sql-shape-router regex; no LLM call made",
+  "output": "Total revenue last quarter was $1.2M.",
+  "model": "duckdb",
+  "gateway": "litellm",
+  "tokens": {"input": 0, "output": 0, "cached": 0},
+  "latency_ms": 120,
+  "cost_usd": 0.01,
+  "cache_hit": true,
+  "fallback_used": null,
+  "metadata": {
+    "virtual_key": "analytics-agent-v1",
+    "user_id": "user_42",
+    "feature": "ops_qa",
+    "monthly_usd_so_far": 14.22,
+    "prompt_prefix_hash": "a1b2c3d4",
+    "guardrails_fired": []
+  }
+}

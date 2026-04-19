@@ -1,0 +1,13 @@
+query_id,query,expected_tool,expected_param_key,expected_param_value,expected_result_count,expected_tokens_max
+Q-001,Status of order ORD-7741,get_order_status,order_id,ORD-7741,1,200
+Q-002,What is the status of order ORD-8820,get_order_status,order_id,ORD-8820,1,200
+Q-003,List open tickets in the payments queue,search_tickets_by_status,status,open,5,800
+Q-004,Show me resolved tickets,search_tickets_by_status,status,resolved,5,800
+Q-005,Fetch customer profile for cust-0042,get_customer_profile,customer_id,cust-0042,1,300
+Q-006,Get the customer cust-9001,get_customer_profile,customer_id,cust-9001,1,300
+Q-007,Escalate ticket TCK-5510 to tier 2,escalate_ticket,ticket_id,TCK-5510,1,150
+Q-008,Find tickets stuck in triage,search_tickets_by_status,status,triage,5,800
+Q-009,Status of order not-a-real-id,get_order_status,order_id,not-a-real-id,0,120
+Q-010,Escalate ticket WRONG-FORMAT,escalate_ticket,ticket_id,WRONG-FORMAT,0,120
+Q-011,Do everything about the Acme account,none,none,none,0,0
+Q-012,Run sql select star from tickets,none,none,none,0,0

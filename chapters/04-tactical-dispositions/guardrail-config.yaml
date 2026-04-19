@@ -1,0 +1,67 @@
+# Guardrails for the schema-defence triage agent.
+# The schema is the defence. These rules enforce what the Pydantic model
+# cannot: input shaping before send, retry budget, refusal on budget exhausted.
+
+schema_reference:
+  model: Triage
+  source: run-eval.py
+  fields:
+    category: {type: string, enum: [bug, feature, question, noise]}
+    priority: {type: integer, minimum: 1, maximum: 5}
+    summary: {type: string, max_length: 140}
+
+rules:
+  - name: input-cap
+    type: length
+    target: input_body
+    max_chars: 2000
+    action: truncate
+    message: "Input over 2000 chars is truncated before send. The prompt does not carry the tail."
+
+  - name: empty-input-refuse
+    type: length
+    target: input_body
+    min_chars: 1
+    action: refuse
+    message: "Empty ticket body. Nothing to classify. Return a structured refusal, not a guess."
+
+  - name: retry-budget
+    type: retries
+    max_attempts: 3
+    action: raise_on_exhausted
+    message: "Schema validation failed after 3 attempts. Raise SchemaExhausted. Caller handles."
+
+  - name: validation-error-as-feedback
+    type: retry_prompt
+    template: "The previous response failed validation: {{error}}. Return a corrected response in the required JSON schema."
+    action: use
+    message: "Retry carries the specific validation error, not a generic 'try again'."
+
+  - name: no-regex-fallback
+    type: forbidden_pattern
+    in_code: true
+    pattern: "re\\.match.*model_output|re\\.search.*model_output"
+    action: reject
+    message: "Do not regex-parse model output. The schema is the parser."
+
+  - name: no-bare-json-loads
+    type: forbidden_pattern
+    in_code: true
+    pattern: "try:\\s*json\\.loads\\([^)]+\\)\\s*\\n\\s*except:"
+    action: reject
+    message: "No bare try/except around json.loads. Let the Pydantic ValidationError drive the retry."
+
+  - name: tool-whitelist
+    type: enum
+    field: tools_allowed
+    values: []
+    action: reject
+    message: "This agent exposes no tools. Tool-call injection is structurally impossible."
+
+observability:
+  log_fields:
+    - attempt_number
+    - validation_errors
+    - final_outcome
+    - tokens_per_attempt
+  metric: schema_valid_first_attempt_rate

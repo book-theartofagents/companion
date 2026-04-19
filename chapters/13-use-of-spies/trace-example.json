@@ -1,0 +1,36 @@
+{
+  "trace_id": "trace_ch13_001",
+  "scenario_id": "SCN-103",
+  "question": "What is compost in this model?",
+  "retrieved_context": "compost discards the code and keeps the learning",
+  "agent_answer": "compost means discard the code and keep the learning",
+  "reference_answer": "discard code and keep the learning",
+  "metrics": {
+    "faithfulness": 0.95,
+    "answer_correctness": 0.91,
+    "context_precision": 1.0
+  },
+  "judge": {
+    "kind": "deterministic_heuristic",
+    "calibrated_against_humans": true,
+    "calibration_sample_size": 40,
+    "inter_rater_agreement": 0.87,
+    "note": "real run would call ragas evaluate() on a dataframe"
+  },
+  "spec_loop": {
+    "dataset_version": "v1.2.0",
+    "dataset_updated_days_ago": 7,
+    "delta_produced": false,
+    "delta_reason": "all metrics above threshold; no change proposed"
+  },
+  "model": "claude-sonnet-4-7",
+  "gateway": "litellm",
+  "tokens": {"input": 180, "output": 62, "cached": 140},
+  "latency_ms": 410,
+  "cost_usd": 0.003,
+  "metadata": {
+    "program": "dspy.RAGProgram",
+    "optimiser": "BootstrapFewShot",
+    "commons_write": "learning_SCN-103_v1"
+  }
+}

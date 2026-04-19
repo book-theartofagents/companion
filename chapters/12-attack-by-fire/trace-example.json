@@ -1,0 +1,22 @@
+{
+  "trace_id": "trace_ch12_001",
+  "input": "Revenue by month for last quarter",
+  "route": "cookbook",
+  "cookbook_key": "revenue_by_month",
+  "reason": "matched stored query via keyword index; no model call made",
+  "sql_emitted": "SELECT date_trunc('month', created_at) AS month, SUM(total) AS revenue FROM orders WHERE created_at >= ? AND created_at < ? GROUP BY 1 ORDER BY 1",
+  "parameters": ["2026-01-01", "2026-04-01"],
+  "output_rows": 3,
+  "engine": "duckdb",
+  "model": null,
+  "tokens": {"input": 0, "output": 0, "cached": 0},
+  "latency_ms": 38,
+  "cost_usd": 0.0,
+  "metadata": {
+    "feature": "analytics_qa",
+    "user_id": "user_42",
+    "cookbook_version": "v1.4",
+    "monthly_usd_so_far": 0.22,
+    "guardrails_fired": []
+  }
+}

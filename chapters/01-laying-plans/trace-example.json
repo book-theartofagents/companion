@@ -1,0 +1,30 @@
+{
+  "trace_id": "trace_ch01_001",
+  "delta_id": "delta_session_timeout_v1",
+  "scenario_id": "SCN-001",
+  "input": {
+    "delta_type": "ADDED",
+    "requirement": "Session timeout",
+    "given": "a session in status active",
+    "when": "no request is received for the configured idle window",
+    "then": "the system moves the session to expired"
+  },
+  "output": {
+    "kind": "patch",
+    "cites_scenario": "SCN-001",
+    "files_touched": ["src/auth/middleware.py", "tests/auth/test_session_timeout.py"],
+    "assertions_added": 2,
+    "test_passes": true
+  },
+  "model": "claude-opus-4-7",
+  "gateway": "litellm",
+  "tokens": {"input": 312, "output": 184, "cached": 280},
+  "latency_ms": 940,
+  "cost_usd": 0.004,
+  "metadata": {
+    "spec_repository": "openspec://auth/session",
+    "evaluator": "scenario_coverage_v2",
+    "scenario_coverage": 1.0,
+    "spec_drift": 0.0
+  }
+}

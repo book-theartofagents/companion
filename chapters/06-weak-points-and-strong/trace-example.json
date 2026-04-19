@@ -1,0 +1,72 @@
+{
+  "trace_id": "trace_ch06_001",
+  "name": "support.answer",
+  "start": "2026-04-19T10:14:02.102Z",
+  "end": "2026-04-19T10:14:02.922Z",
+  "metadata": {
+    "feature": "support.answer",
+    "user_id": "user_42",
+    "session_id": "sess_9f81",
+    "agent_version": "support-v3"
+  },
+  "spans": [
+    {
+      "span_id": "span_001",
+      "parent_span_id": null,
+      "name": "retrieve",
+      "kind": "span",
+      "start": "2026-04-19T10:14:02.105Z",
+      "end": "2026-04-19T10:14:02.240Z",
+      "metadata": {
+        "retriever": "pgvector",
+        "k": 5,
+        "cache_hit": true
+      }
+    },
+    {
+      "span_id": "span_002",
+      "parent_span_id": "span_001",
+      "name": "synthesise",
+      "kind": "generation",
+      "start": "2026-04-19T10:14:02.241Z",
+      "end": "2026-04-19T10:14:02.920Z",
+      "metadata": {
+        "model": "claude-opus-4-7",
+        "gateway": "litellm",
+        "prompt_name": "support.answer",
+        "prompt_version": "v12",
+        "prompt_prefix_hash": "a1b2c3d4",
+        "cost_usd": 0.021,
+        "cache_hit": true,
+        "fallback_used": null
+      },
+      "usage": {
+        "input_tokens": 320,
+        "output_tokens": 180,
+        "cached_tokens": 280
+      }
+    },
+    {
+      "span_id": "span_003",
+      "parent_span_id": null,
+      "name": "evaluator",
+      "kind": "score",
+      "start": "2026-04-19T10:14:03.100Z",
+      "end": "2026-04-19T10:14:03.380Z",
+      "metadata": {
+        "evaluator": "phoenix.llm_classify",
+        "template": "support.answer.correctness",
+        "judge_model": "claude-sonnet-4-7",
+        "label": "correct",
+        "score": 0.94,
+        "explanation": "Cites the documented policy. Matches the reviewer-graded reference."
+      }
+    }
+  ],
+  "totals": {
+    "latency_ms": 820,
+    "input_tokens": 320,
+    "output_tokens": 180,
+    "cost_usd": 0.021
+  }
+}

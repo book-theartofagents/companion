@@ -1,0 +1,83 @@
+# Observability guardrails for agent traces.
+# The trace is the primary artefact. These rules make it queryable.
+
+backend:
+  name: langfuse
+  version: "4.2.0"
+  self_host: true
+  otel_compatible: true
+
+evaluator:
+  name: phoenix
+  version: "5.2.0"
+  # Runs in a notebook against exported traces.
+  joins_on: trace_id
+
+span_schema:
+  required_fields:
+    - trace_id
+    - span_id
+    - parent_span_id
+    - name
+    - start
+    - end
+    - metadata.feature
+    - metadata.user_id
+  generation_required:
+    - metadata.model
+    - metadata.prompt_version
+    - usage.input_tokens
+    - usage.output_tokens
+    - metadata.cost_usd
+
+rules:
+  - name: trace-id-present
+    type: required_field
+    field: trace_id
+    action: reject
+    message: "Every invocation must carry a stable trace_id. No trace_id, no observability."
+
+  - name: cost-attribution
+    type: required_field
+    field: metadata.cost_usd
+    applies_to: generation
+    action: reject
+    message: "Generation spans must carry cost_usd. Aggregate dashboards are not enough."
+
+  - name: prompt-version-present
+    type: required_field
+    field: metadata.prompt_version
+    applies_to: generation
+    action: reject
+    message: "Generation spans must name the prompt version. Drift without provenance is unrecoverable."
+
+  - name: feature-and-user
+    type: required_fields
+    fields: [metadata.feature, metadata.user_id]
+    action: reject
+    message: "Every trace must carry feature and user_id. Otherwise cost attribution is guesswork."
+
+  - name: no-timestamp-in-prefix
+    type: regex
+    applies_to: prompt_prefix
+    pattern: "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}"
+    action: reject
+    message: "Timestamp in prompt prefix kills the cache key. See Chapter 2."
+
+  - name: silent-wrong-answer-check
+    type: join
+    left: trace
+    right: evaluator_result
+    on: trace_id
+    expect_match_rate: 1.0
+    action: warn
+    message: "Not every production trace has an evaluator result. The silent wrong answer can hide here."
+
+  - name: p95-latency-per-feature
+    type: aggregate
+    group_by: metadata.feature
+    metric: latency_ms
+    percentile: 95
+    threshold_ms: 2500
+    action: warn
+    message: "p95 latency exceeds 2500ms for at least one feature. Investigate the trace tree, not the average."

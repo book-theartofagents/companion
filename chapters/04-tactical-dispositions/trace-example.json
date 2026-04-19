@@ -1,0 +1,50 @@
+{
+  "trace_id": "trace_ch04_007",
+  "ticket_id": "T-007",
+  "ticket_body": "Add a keyboard shortcut for quick search",
+  "schema": "Triage",
+  "defence_mechanism": "validate_and_retry",
+  "attempts": [
+    {
+      "attempt": 1,
+      "model": "claude-opus-4-7",
+      "raw_output": "{\"category\": \"enhancement\", \"priority\": 2, \"summary\": \"Add keyboard shortcut for quick search\"}",
+      "validation_result": "failed",
+      "validation_errors": [
+        {
+          "field": "category",
+          "input": "enhancement",
+          "msg": "String should match pattern '^(bug|feature|question|noise)$'"
+        }
+      ],
+      "tokens": {"input": 320, "output": 48},
+      "latency_ms": 780
+    },
+    {
+      "attempt": 2,
+      "model": "claude-opus-4-7",
+      "retry_prompt_suffix": "The previous response failed validation: category=`enhancement` is not in the allowed set `bug|feature|question|noise`. Return a corrected response.",
+      "raw_output": "{\"category\": \"feature\", \"priority\": 2, \"summary\": \"Add keyboard shortcut for quick search\"}",
+      "validation_result": "passed",
+      "parsed": {
+        "category": "feature",
+        "priority": 2,
+        "summary": "Add keyboard shortcut for quick search"
+      },
+      "tokens": {"input": 380, "output": 42},
+      "latency_ms": 720
+    }
+  ],
+  "final_outcome": "valid",
+  "metadata": {
+    "retries_used": 1,
+    "retry_budget": 3,
+    "total_tokens": {"input": 700, "output": 90},
+    "total_latency_ms": 1500,
+    "total_cost_usd": 0.018,
+    "gateway": "litellm",
+    "schema_library": "pydantic@2.12",
+    "structured_output_lib": "instructor@1.12",
+    "guardrails_fired": ["validation-error-as-feedback"]
+  }
+}

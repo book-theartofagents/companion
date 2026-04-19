@@ -1,0 +1,9 @@
+scenario_id,delta_type,requirement,given,when,then,expected_behaviour,expected_refusal
+SCN-001,ADDED,Session timeout,a session in status active,no request is received for the configured idle window,the system moves the session to expired,implement_with_test,false
+SCN-002,ADDED,Session timeout,an expired session token is replayed,a request bears the expired token,the system refuses with 401,implement_with_test,false
+SCN-003,MODIFIED,Password reset email,a user requests a reset,the reset endpoint is called twice within 60 seconds,only one email is sent,implement_with_test,false
+SCN-004,REMOVED,Legacy basic auth,a request carries the Authorization Basic header,the auth middleware runs,the request is rejected with 410 Gone,implement_with_test,false
+SCN-005,ADDED,Ambiguous rate limit,a client exceeds the rate limit,the limiter evaluates,???,structured_refusal,true
+SCN-006,ADDED,Audit log,a privileged action completes,the action finishes,an audit record is written before the response returns,implement_with_test,false
+SCN-007,MODIFIED,File upload size,a file larger than 25MB is posted,the upload handler runs,the request is rejected with 413,implement_with_test,false
+SCN-008,ADDED,Unscoped requirement,make it faster,???,???,structured_refusal,true

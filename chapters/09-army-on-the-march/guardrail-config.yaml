@@ -1,0 +1,100 @@
+# Rollout config in the Dify workflow shape from Chapter 9.
+# The platform owns the rollout mechanics. Application code does not know
+# which version is serving a given request. It only knows which version
+# answered, from the version id on the trace.
+
+workflow:
+  name: support-triage
+  current_version: v1
+  candidate_version: v2
+
+versions:
+  v1:
+    workflow_id: wf_support_triage_v1_2026_03_18
+    model:
+      id: anthropic.claude-opus-4-7
+      snapshot: "2026-04-11"
+    prompt_ref: support.triage.v11
+    tool_schemas:
+      - schema_ref: support.tools.v5
+    retained_as_rollback_target: true
+
+  v2:
+    workflow_id: wf_support_triage_v2_2026_04_14
+    model:
+      id: anthropic.claude-opus-4-7
+      snapshot: "2026-04-11"
+    prompt_ref: support.triage.v12
+    tool_schemas:
+      - schema_ref: support.tools.v5
+
+rollout:
+  strategy: canary
+  stages:
+    - name: shadow
+      traffic_percent: 0
+      mirror_percent: 100
+      min_samples: 200
+      gate:
+        metric: shadow_disagreement_rate
+        operator: "<="
+        threshold: 0.15
+    - name: canary
+      traffic_percent: 10
+      mirror_percent: 100
+      min_samples: 50
+      gate:
+        metric: thumbs_down_rate
+        operator: "<="
+        threshold: 0.08
+        window: 30m
+    - name: rollout
+      traffic_percent: 50
+      mirror_percent: 10
+      gate:
+        metric: thumbs_down_rate
+        operator: "<="
+        threshold: 0.08
+        window: 24h
+    - name: full
+      traffic_percent: 100
+      mirror_percent: 0
+
+rollback:
+  triggers:
+    - metric: thumbs_down_rate
+      operator: ">"
+      threshold: 0.08
+      window: 30m
+    - metric: shadow_disagreement_rate
+      operator: ">"
+      threshold: 0.20
+      window: 1h
+    - metric: error_rate
+      operator: ">"
+      threshold: 0.05
+      window: 15m
+  action: route_all_traffic_to: v1
+  max_seconds_to_full_rollback: 60
+  page_on_rollback: false
+  page_on_rollback_plus_incident: true
+
+rules:
+  - name: no-alias-on-hot-path
+    type: regex
+    pattern: "^claude-(opus|sonnet|haiku)-[0-9]-[0-9]$"
+    action: reject
+    message: "Model reference is an alias. Pin the dated snapshot. See Ch. 9 on silent updates."
+
+  - name: version-tag-required
+    type: contains
+    value: "workflow_version="
+    action: reject
+    message: "Trace missing workflow_version. Every request must cite the version that served it."
+
+  - name: rollback-rehearsed
+    type: metadata
+    key: last_rollback_drill_age_days
+    condition: "<= 30"
+    action: warn
+    message: "Rollback drill is older than 30 days. A plan nobody has run is a wish."

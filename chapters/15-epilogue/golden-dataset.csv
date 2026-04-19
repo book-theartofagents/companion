@@ -1,0 +1,11 @@
+scenario_id,chapter,has_spec,has_dataset,has_guardrail,has_trace,expected_state,expected_score
+SCN-E01,01-laying-plans,true,true,true,true,READY,4
+SCN-E02,02-waging-war,true,true,true,true,READY,4
+SCN-E03,03-attack-by-stratagem,true,true,true,false,IN_PROGRESS,3
+SCN-E04,04-tactical-dispositions,true,true,false,false,IN_PROGRESS,2
+SCN-E05,05-energy,false,false,false,false,NOT_STARTED,0
+SCN-E06,06-weak-points-and-strong,true,false,false,false,NOT_STARTED,1
+SCN-E07,07-manoeuvring,true,true,false,true,IN_PROGRESS,3
+SCN-E08,08-variation-in-tactics,false,true,true,true,IN_PROGRESS,3
+SCN-E09,09-army-on-the-march,true,true,true,true,READY,4
+SCN-E10,10-terrain,true,false,true,false,IN_PROGRESS,2

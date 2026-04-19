@@ -1,0 +1,91 @@
+# Durable-workflow guardrails for the support-triage agent.
+# Shape borrowed from Temporal's Python SDK. The policy lives with the
+# workflow definition, not inside the activity code.
+
+workflow:
+  name: SupportAgentWorkflow
+  task_queue: support-triage
+  # Workflow must finish or fail in the open within the TTL.
+  run_timeout_seconds: 3600
+  # Retain event history for replay and audit.
+  retention_days: 14
+
+activities:
+  - name: classify
+    start_to_close_timeout_seconds: 15
+    retry_policy:
+      maximum_attempts: 3
+      initial_interval_seconds: 1
+      backoff_coefficient: 2.0
+      non_retryable_error_types: [ValidationError, PolicyViolation]
+
+  - name: draft
+    start_to_close_timeout_seconds: 120
+    retry_policy:
+      maximum_attempts: 3
+      initial_interval_seconds: 2
+      backoff_coefficient: 2.0
+      non_retryable_error_types: [ValidationError, BudgetExceeded]
+    fallback:
+      on_timeout: draft_with_cheaper_model
+      on_rate_limit: backoff_with_jitter
+
+  - name: review
+    start_to_close_timeout_seconds: 30
+    retry_policy:
+      maximum_attempts: 2
+
+signals:
+  - name: approve
+    # Human-in-the-loop wait. Workflow pauses, worker is free, signal
+    # resumes execution from the wait condition.
+    wait_condition_timeout_seconds: 86400
+
+determinism:
+  # These calls are forbidden in workflow code. They must live in activities.
+  forbidden_in_workflow:
+    - datetime.now
+    - time.sleep
+    - random
+    - requests.get
+    - open
+    - os.environ
+  allowed_via:
+    workflow.now: replaces_datetime_now
+    workflow.sleep: replaces_time_sleep
+    workflow.random: replaces_random
+    workflow.execute_activity: wraps_side_effects
+
+rules:
+  - name: activity-timeout-required
+    type: required_field
+    field: start_to_close_timeout_seconds
+    action: reject
+    message: "Every activity must declare start_to_close_timeout. Unbounded awaits are outages in waiting."
+
+  - name: no-forbidden-calls-in-workflow
+    type: static_check
+    scope: workflow_body
+    blocked: [datetime.now, time.sleep, random.random, requests.get, open]
+    action: reject
+    message: "Workflow code must stay deterministic. Side effects belong in activities."
+
+  - name: non-retryable-listed
+    type: required_field
+    field: non_retryable_error_types
+    applies_to: draft
+    action: warn
+    message: "Draft activity retries are compounding unless non-retryable errors are enumerated."
+
+  - name: human-wait-via-signal
+    type: required_pattern
+    pattern: "workflow.wait_condition"
+    applies_to: human_approval
+    action: reject
+    message: "Human approval must use signals. Polling an inbox is the single-process anti-pattern."
+
+  - name: run-timeout-set
+    type: required_field
+    field: run_timeout_seconds
+    action: reject
+    message: "Workflow TTL missing. A workflow without a deadline is a memory leak."

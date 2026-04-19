@@ -1,0 +1,39 @@
+# Guardrails for the spec-driven coding agent.
+# The contract lives above the prompt. These rules enforce it.
+
+rules:
+  - name: scenario-citation-required
+    type: contains
+    value: "SCN-"
+    action: reject
+    message: "Agent output must cite the scenario id it is satisfying."
+
+  - name: no-unscoped-implementation
+    type: regex
+    pattern: "\\b(TODO|FIXME|probably|might|should probably)\\b"
+    action: reject
+    message: "Agent output contains speculative language. The delta is the contract. Implement exactly, or refuse."
+
+  - name: refusal-structure
+    type: schema
+    schema:
+      type: object
+      required: [scenario_id, reason, missing_information]
+      properties:
+        scenario_id: {type: string, pattern: "^SCN-[0-9]+$"}
+        reason: {type: string, enum: [ambiguous_given, ambiguous_when, ambiguous_then, conflicts_with_invariant]}
+        missing_information: {type: string, minLength: 10}
+    action: warn
+    message: "Refusals must be structured, not prose apologies."
+
+  - name: patch-size-cap
+    type: length
+    max_lines: 200
+    action: warn
+    message: "Patch exceeds 200 lines. Reviewer fatigue is a failure mode. Split the delta."
+
+  - name: no-prompt-leakage
+    type: regex
+    pattern: "(you are a|you should|as an AI|as a helpful)"
+    action: reject
+    message: "Prompt folklore detected in output. The spec is the source, not the prompt."

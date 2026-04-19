@@ -1,0 +1,11 @@
+scenario_id,question,retrieved_context,reference_answer,acceptance_notes
+SCN-101,What does promote mean for a proefballon?,"promote graduates an experiment to production via full OpenSpec",graduate to production via full OpenSpec,exact phrase acceptable
+SCN-102,Can I pivot a proefballon?,"pivot keeps the learning and starts a new hypothesis",yes pivot keeps the learning and starts a new hypothesis,keyword pivot and learning must appear
+SCN-103,What is compost in this model?,"compost discards the code and keeps the learning",discard code and keep the learning,must say discard and keep
+SCN-104,How long does a proefballon live by default?,"default TTL is fourteen days",fourteen days,exact number required
+SCN-105,Can a proefballon run without a spec?,"no a proefballon requires a one paragraph intent",no it requires a one paragraph intent,refusal plus reason
+SCN-106,Who owns the commons?,"the commons is a shared layer across projects",shared layer across projects,must mention shared or cross project
+SCN-107,What is BYOK in this platform?,"BYOK is bring your own key with project team tenant resolution",bring your own key with hierarchical resolution,keyword BYOK and hierarchy
+SCN-108,Is there an SLA on preview URLs?,"preview URLs are ephemeral and TTL capped no production SLA applies",no production SLA preview URLs are ephemeral,must state no SLA
+SCN-109,What happens when a proefballon expires?,"on expiry feedback is synthesised into a learning artefact",a learning artefact is synthesised from feedback,must mention learning and synthesis
+SCN-110,Can I deploy to production from a proefballon directly?,"no deployment requires promote which runs the full OpenSpec",no you must promote through full OpenSpec,refusal plus promote path

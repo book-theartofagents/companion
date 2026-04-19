@@ -1,0 +1,11 @@
+question,expected_route,expected_cost_usd,cookbook_key,notes
+Revenue by month for last quarter,cookbook,0.00,revenue_by_month,recurs weekly in business review
+Top 10 products by revenue this year,cookbook,0.00,top_n_products,recurs in monthly pack
+Active users by cohort for Q1,cookbook,0.00,active_users_by_cohort,recurs in product review
+Conversion rate by funnel step,cookbook,0.00,funnel_conversion,recurs in growth sync
+Customer count by segment,cookbook,0.00,customers_by_segment,recurs in sales pipeline
+Which suppliers exceeded their lead time last week,text_to_sql,0.01,,novel phrasing stable schema
+Show me orders with discount greater than 30 percent,text_to_sql,0.01,,ad-hoc lookup natural language
+List invoices unpaid after 60 days in EMEA,text_to_sql,0.01,,ad-hoc lookup schema known
+Compare this quarter to last year and explain the drivers,agent,0.03,,multi step reasoning narrative required
+Draft a note to the board about Q1 performance,agent,0.03,,writing task not retrieval
