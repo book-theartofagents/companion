@@ -1,0 +1,43 @@
+Challenge 12: Prove when not to use the agent
+==============================================
+Paired with Chapter 12 (Attack by Fire) and chapters/12-attack-by-fire/
+
+Context
+-------
+Chapter 12 is the most unpopular chapter. It argues that the right
+answer is often a SQL query, a cron job, or a hand-written rule, and
+no agent at all. The example in chapters/12-attack-by-fire/ uses Vanna
+and DuckDB to show an LLM-powered query versus a plain SQL query
+side by side.
+
+Challenge
+---------
+1. Run `python chapters/12-attack-by-fire/run-eval.py`. Observe the
+   same answer produced two ways.
+2. For each of the five scenarios, pick the path you would ship: LLM
+   or SQL. Justify in one sentence.
+3. Take one scenario where you chose LLM. Rewrite it as a SQL query
+   you would actually commit. Measure the cost difference.
+4. Take one scenario where you chose SQL. Argue the case for LLM
+   instead. Identify the specific condition under which the LLM path
+   becomes worth its cost.
+5. Write a checklist: five questions you would ask before approving
+   an agent for a new task. Keep it short enough to fit on a sticky
+   note.
+
+Constraints
+-----------
+- The SQL you commit must run. No pseudocode.
+- The checklist must be five questions or fewer. Longer lists do not
+  get used.
+
+Success criterion
+-----------------
+A sticky-note checklist that a colleague can use in the next
+planning meeting without explanation. At least one of your five
+scenarios is on the SQL side after this exercise.
+
+Where to compare
+----------------
+If all five stayed on the LLM side after you did the cost work, you
+are rationalising. Try again with a harder cost bar.

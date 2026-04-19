@@ -1,0 +1,39 @@
+Challenge 1: Tighten the contract until it bites
+=================================================
+Paired with Chapter 1 (Laying Plans) and chapters/01-laying-plans/
+
+Context
+-------
+Chapter 1 argues that the spec is the real source of truth. The runnable
+example in chapters/01-laying-plans/ ships a contract with five invariants
+and a golden dataset of twelve scenarios. It passes. That is the problem
+with your first exercise: a passing suite tells you nothing you did not
+already know.
+
+Challenge
+---------
+1. Read spec.md until you can list every invariant from memory.
+2. Add one scenario to golden-dataset.csv that the current run-eval.py
+   will fail. Not a flaky test. A case the spec already forbids but the
+   implementation happens to allow.
+3. Run `python chapters/01-laying-plans/run-eval.py`. Confirm it fails
+   on your new row and only on that row.
+4. Fix the implementation until the suite passes again. No change to
+   spec.md. The contract was right; the code drifted.
+
+Constraints
+-----------
+- Your new row must cite an existing invariant by ID in the scenario name.
+- Keep scenario count under 20. A test suite that takes a minute gets run;
+  one that takes five does not.
+
+Success criterion
+-----------------
+`python chapters/01-laying-plans/run-eval.py` exits 0 with your added row
+visible in the output. Commit only the delta to the CSV and the code. The
+spec stays untouched.
+
+Where to compare
+----------------
+Your discipline is measured by what you did not touch. If you edited the
+spec to make the test pass, you inverted the loop. Read the spec again.

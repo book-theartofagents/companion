@@ -1,0 +1,43 @@
+Challenge 6: Trace the run you cannot explain
+==============================================
+Paired with Chapter 6 (Weak Points and Strong) and chapters/06-weak-points-and-strong/
+
+Context
+-------
+Chapter 6 argues that observability is not logging plus dashboards. It
+is a structured trace per run with a trace_id, spans per tool call,
+token counts per span, and a metadata block rich enough to replay the
+decision later. The example in chapters/06-weak-points-and-strong/ ships
+a trace-example.json that shows the shape.
+
+Challenge
+---------
+1. Read trace-example.json. List every top-level field and what it
+   answers about the run.
+2. Pick a real agent run you have made recently, from any project. In a
+   short markdown file, reconstruct what that run would look like as a
+   trace-example.json. Fill in the fields you know; leave the rest as
+   `"unknown"`.
+3. Count the unknowns. Each one is a gap in your observability.
+4. Run `python chapters/06-weak-points-and-strong/run-eval.py` and
+   compare the trace shape it emits with your reconstruction.
+5. Pick one unknown and plan the instrumentation change that would
+   close it. Write the change as a spec delta, not as code.
+
+Constraints
+-----------
+- Do not cheat by picking a run that already had tracing. The point is
+  to expose the gap.
+- The spec delta must name the span, the field, and the invariant.
+
+Success criterion
+-----------------
+A short markdown file with your reconstruction, the unknown count, and
+the one spec delta. If you can put a number on your observability
+debt, you have already improved it.
+
+Where to compare
+----------------
+If your unknown count was zero, you chose the wrong run. Pick a harder
+one. Every production agent has at least three unknowns when you look
+carefully.

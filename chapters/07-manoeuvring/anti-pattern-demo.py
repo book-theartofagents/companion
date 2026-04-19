@@ -157,8 +157,8 @@ def main() -> None:
     lost = agent.vm_reboot()
     print(f"Lost on reboot:          {len(lost)}")
     print(f"In-flight after reboot:  {len(agent.in_flight)}")
-    print(f"Users saw:               long-running queries disappear with no error.")
-    print(f"Process saw:             nothing. Process that would have raised the error is gone.")
+    print("Users saw:               long-running queries disappear with no error.")
+    print("Process saw:             nothing. Process that would have raised the error is gone.")
     print()
 
     # Compare against the durable version in run-eval.py.

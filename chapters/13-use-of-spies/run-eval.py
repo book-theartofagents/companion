@@ -27,9 +27,9 @@ import csv
 import json
 import re
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable
 
 HERE = Path(__file__).parent
 
@@ -207,7 +207,7 @@ def propose_deltas(results: list[Result], rows: list[dict]) -> list[DeltaProposa
     to the spec repository.
     """
     proposals: list[DeltaProposal] = []
-    for r, row in zip(results, rows):
+    for r, row in zip(results, rows, strict=False):
         if r.passed:
             continue
         question_hint = row.get("question", "")[:60]
@@ -284,7 +284,7 @@ def main() -> int:
     optimised = run_against_dataset(optimised_agent, rows)
     opt_score = score(optimised)
     print("-- After optimisation --")
-    for b, o in zip(baseline, optimised):
+    for b, o in zip(baseline, optimised, strict=False):
         arrow = "->" if not b.passed and o.passed else "  "
         tag = "PASS" if o.passed else "FAIL"
         print(

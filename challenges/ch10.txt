@@ -1,0 +1,45 @@
+Challenge 10: Map the terrain before you build the road
+========================================================
+Paired with Chapter 10 (Terrain) and chapters/10-terrain/
+
+Context
+-------
+Chapter 10 is enterprise terrain: the messy data, the legacy systems,
+the access controls, the PII, the org chart. Agents that ignore the
+terrain break in production. The example in chapters/10-terrain/ uses
+LlamaIndex to index a mixed corpus with source attribution and
+permission metadata.
+
+Challenge
+---------
+1. Run `python chapters/10-terrain/run-eval.py`. Confirm it indexes
+   the sample corpus and answers with citations.
+2. Add a document to the corpus tagged with a permission the test
+   user does not have. Confirm the agent refuses to surface it.
+3. Add a document with stale information (two years older than the
+   rest, contradicting the newer source). Confirm the agent prefers
+   the newer source and cites both.
+4. Add a document with no permission metadata at all. The spec says
+   the default is deny. Confirm the agent treats it that way.
+5. Write a one-paragraph note for the product owner explaining why
+   "we indexed everything" is not a feature.
+
+Constraints
+-----------
+- Do not patch the retriever to guess missing metadata. Missing
+  metadata is the signal.
+- Citations must include source ID, permission scope, and last
+  modified timestamp.
+
+Success criterion
+-----------------
+The three added documents behave as specified. Your note fits on one
+page and mentions at least one concrete risk that "index everything"
+creates (PII leakage, stale sources, access bypass).
+
+Where to compare
+----------------
+If your agent answered with the stale source without citing the
+newer one, the ranker is weak. If it surfaced the permission-gated
+document, the retriever bypassed the filter. Both are production
+bugs.

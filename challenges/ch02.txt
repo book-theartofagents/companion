@@ -1,0 +1,40 @@
+Challenge 2: Burn the wallet on purpose
+========================================
+Paired with Chapter 2 (Waging War) and chapters/02-waging-war/
+
+Context
+-------
+The gateway in chapters/02-waging-war/ tracks tokens per call and refuses
+work that exceeds budget. The golden dataset has a mix of cheap lookups
+and expensive summarisations. The anti-pattern demo shows what happens
+when every request runs through the biggest model available.
+
+Challenge
+---------
+1. Run `python chapters/02-waging-war/run-eval.py` and note the total
+   cost reported.
+2. Run `python chapters/02-waging-war/anti-pattern-demo.py` and note its
+   cost.
+3. The gap between the two is your thesis. Write it down as one sentence
+   in a comment at the top of your notes file.
+4. Now break the discipline on purpose. Pick one query from the dataset
+   and route it through the expensive model even though the router said
+   otherwise. Measure the cost delta.
+5. Restore the routing. Prove with a diff that you are back to baseline.
+
+Constraints
+-----------
+- You must log the cost of every call. No guesses.
+- Do not add a new model. Use what the gateway already knows about.
+
+Success criterion
+-----------------
+A short table in your notes showing: baseline cost, anti-pattern cost,
+your deliberate miss, restored cost. The table should make it obvious
+why the gateway exists.
+
+Where to compare
+----------------
+If your deliberate miss cost less than the anti-pattern total, the
+gateway is already doing most of the work. If it cost more, you found
+a real hole in the routing rules. Either outcome teaches something.

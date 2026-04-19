@@ -152,7 +152,7 @@ def main() -> None:
     traces = len(rows)
     features = {r["feature"] for r in rows}
     wrong = sum(1 for r in rows if r["evaluator_label"] == "incorrect")
-    print(f"Trace-first (run-eval.py):")
+    print("Trace-first (run-eval.py):")
     print(f"  {traces} traces, {len(features)} features, {wrong} silent-wrong caught by evaluator.")
     print("  p95/cost/cache/fallback answered in one query.")
     print()

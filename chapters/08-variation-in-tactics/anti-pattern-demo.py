@@ -134,7 +134,7 @@ def main() -> None:
     print()
     print("The refactor (same work, solo formation, four tools):")
     solo = refactored_solo()
-    print(f"Agents:              1")
+    print("Agents:              1")
     print(f"Latency:             {solo.latency_ms / 1000:.1f} s  (book: 12s)")
     print(f"Cost per doc:        USD {solo.cost_usd:.2f}  (book: ~$0.40)")
     print(f"Ratio:               {total_cost / solo.cost_usd:.0f}x cost saved, {total_latency / solo.latency_ms:.0f}x faster.")

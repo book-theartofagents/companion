@@ -1,0 +1,42 @@
+Challenge 3: Draw the graph, then break a node
+===============================================
+Paired with Chapter 3 (Attack by Stratagem) and chapters/03-attack-by-stratagem/
+
+Context
+-------
+Composition beats monoliths. The LangGraph example in chapter 3 chains
+four nodes: intake, plan, act, critic. Each node has one job. Each edge
+has a schema. The graph is the real control flow; the prompts are
+details.
+
+Challenge
+---------
+1. Draw the graph on paper before reading the code. List the nodes you
+   expect from the spec alone. List the edges.
+2. Open run-eval.py. Reconcile your drawing with the actual graph. Note
+   where you were wrong.
+3. Pick one node and replace its implementation with a stub that always
+   returns a fixed dummy output. Run the evals. Observe which scenarios
+   still pass (graph routing is correct) and which fail (node content
+   mattered).
+4. Restore the node. Add one edge that the original graph did not have:
+   a retry path from critic back to act, bounded to one retry.
+5. Run the evals again. Confirm nothing regressed.
+
+Constraints
+-----------
+- Your retry loop must be bounded. An unbounded retry is a different
+  anti-pattern and is not what this exercise rewards.
+- Do not change node signatures. Composition lives in the edges.
+
+Success criterion
+-----------------
+`python chapters/03-attack-by-stratagem/run-eval.py` passes both before
+and after your retry edge. Your notes show which tests detected the
+dummy node and which did not.
+
+Where to compare
+----------------
+If every test caught the dummy, your graph is doing too little work at
+the edges. If none did, your tests are too shallow. Good suites show
+a mix.

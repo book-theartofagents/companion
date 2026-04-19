@@ -304,7 +304,7 @@ def _tools_conflict(attempt: AgentAttempt) -> bool:
     # Two tools named *.query_balance that returned different values.
     balance_tools = [
         (t, r)
-        for t, r in zip(attempt.tools_called, attempt.tool_results)
+        for t, r in zip(attempt.tools_called, attempt.tool_results, strict=False)
         if t.endswith("query_balance")
     ]
     return len({r for _, r in balance_tools}) > 1
@@ -321,7 +321,7 @@ def _partial_success(attempt: AgentAttempt) -> bool:
     # A known pattern in this dataset: debit ok, credit fails, leaving
     # the ledger in an inconsistent state.
     if "ledger_api.post_debit" in attempt.tools_called and "ledger_api.post_credit" in attempt.tools_called:
-        r = dict(zip(attempt.tools_called, attempt.tool_results))
+        r = dict(zip(attempt.tools_called, attempt.tool_results, strict=False))
         return r.get("ledger_api.post_debit") == "ok" and r.get("ledger_api.post_credit") != "ok"
     return False
 
@@ -348,7 +348,7 @@ def _silent_wrong(attempt: AgentAttempt) -> bool:
 def _string_similarity(a: str, b: str) -> float:
     if not a or not b:
         return 0.0
-    common = sum(1 for ca, cb in zip(a, b) if ca == cb)
+    common = sum(1 for ca, cb in zip(a, b, strict=False) if ca == cb)
     return common / max(len(a), len(b))
 
 

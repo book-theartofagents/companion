@@ -1,0 +1,45 @@
+Challenge 5: Trade the firehose for a pointer
+==============================================
+Paired with Chapter 5 (Energy) and chapters/05-energy/
+
+Context
+-------
+Chapter 5 builds a tool surface with four invariants: bounded output,
+pydantic-validated input, typed errors, and whitelist dispatch. The
+anti-pattern demo in chapters/05-energy/anti-pattern-demo.py shows what
+happens when each invariant is dropped: a firehose that returns every
+ticket, a single-string tool that re-parses intent, a silent-success
+write, an unchecked dispatcher.
+
+Challenge
+---------
+1. Run both scripts. Record the token cost of the firehose tool and the
+   bound from run-eval.py. Note the overshoot factor.
+2. Design a new tool called `list_tickets_page(status, cursor, limit)`
+   that returns a bounded page plus an opaque cursor for the next
+   page. Max 10 tickets per page.
+3. Add it to the tool registry in run-eval.py with pydantic input
+   validation and a typed exception for invalid cursors.
+4. Add a golden-dataset row that requires two pages of results. Confirm
+   the agent can drive the pagination without the firehose.
+5. Run the evals. Confirm the new row passes and the existing 12 still
+   pass.
+
+Constraints
+-----------
+- The cursor must be opaque to the model. A page-number cursor is fine.
+  A cursor that leaks database offsets is not.
+- A request for a page beyond the last must return an empty page and
+  no error. End of data is not an error.
+
+Success criterion
+-----------------
+`python chapters/05-energy/run-eval.py` passes 13/13 scenarios. Your
+new row completes in two tool calls and stays inside the per-call
+token bound on both calls.
+
+Where to compare
+----------------
+If your agent made three calls instead of two, the schema for the
+cursor is weak. If it made one call with limit=100, you built the
+firehose back under a different name. Both are failures.

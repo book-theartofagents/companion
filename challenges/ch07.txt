@@ -1,0 +1,45 @@
+Challenge 7: Kill the process mid-flight and resume
+====================================================
+Paired with Chapter 7 (Manoeuvring) and chapters/07-manoeuvring/
+
+Context
+-------
+Chapter 7 is durable workflows. A long-running agent task must survive
+process crashes, restarts, and upstream outages. The example in
+chapters/07-manoeuvring/ models a Temporal-style event history: every
+decision appends to a log, and replay rebuilds the state.
+
+Challenge
+---------
+1. Run `python chapters/07-manoeuvring/run-eval.py` and watch the event
+   history it writes to disk.
+2. Pick a scenario that takes more than one tool call. Insert a
+   deliberate crash after the first call (raise an uncaught exception
+   in the middle of the workflow).
+3. Restart the workflow from the event history alone. Confirm the
+   agent does not repeat the first tool call and only does the work
+   that was missing.
+4. Add a compensating action: if the workflow fails permanently, roll
+   back any side effect that was committed. Write it as a new node in
+   the workflow, not as a try/except in the existing code.
+5. Test the compensator by forcing a permanent failure after the first
+   tool call.
+
+Constraints
+-----------
+- Replay must be deterministic. If the tool call returns a timestamp,
+  record the timestamp in the event, do not re-fetch it.
+- The compensator runs once. An idempotent compensator gets a gold
+  star.
+
+Success criterion
+-----------------
+A successful resume after crash (no duplicate calls) and a successful
+compensation after permanent failure (side effects rolled back). Both
+visible in the event history.
+
+Where to compare
+----------------
+If your resume re-did the first call, your event log is write-behind
+instead of write-ahead. Fix the ordering: write the intent first, then
+act.

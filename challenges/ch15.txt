@@ -1,0 +1,47 @@
+Challenge 15: Run the scorecard on your own repo
+=================================================
+Paired with Chapter 15 (Epilogue) and chapters/15-epilogue/
+
+Context
+-------
+Chapter 15 is the readiness scorecard. Four artefacts per chapter:
+spec, golden dataset, guardrail config, trace example. Each chapter
+folder scores 0 to 4. The repository scans all thirteen and reports
+overall readiness. The example in chapters/15-epilogue/run-eval.py
+runs the scorecard on this companion repo.
+
+Challenge
+---------
+1. Run `python chapters/15-epilogue/run-eval.py`. Read the output.
+   Note the overall readiness percentage.
+2. Now run the scorecard on your own production agent repo. You will
+   need to adapt the scanner (point it at your repo root, set the
+   four filenames it looks for). Expect the score to be low.
+3. For each missing artefact, write one sentence on why it is
+   missing. Be specific. "We did not have time" is not an answer;
+   "we never agreed on what good looks like, so the spec is in three
+   heads instead of a file" is.
+4. Pick the single cheapest upgrade: the one artefact in the one
+   chapter that would move the score most per hour of work. Commit
+   to it. Put a date on it.
+5. Six weeks later, run the scorecard again. Adjust your estimate.
+
+Constraints
+-----------
+- You cannot grade your own work charitably. The file exists and
+  has real content, or it does not.
+- The upgrade must be the cheapest move. Do not pick the artefact
+  that sounds most impressive.
+
+Success criterion
+-----------------
+A before score, a written commitment with a date, a scheduled
+re-scan. A scorecard you run twice is worth more than a scorecard
+you run once. A scorecard you never run is worth nothing.
+
+Where to compare
+----------------
+If your first score was already high, pick a harder repo. Real
+production agents rarely clear 60 percent on the first pass. That
+is fine. The point of the scorecard is to make the gap visible,
+not to feel bad.

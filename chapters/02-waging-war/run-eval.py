@@ -124,7 +124,7 @@ def main() -> int:
         rows = list(csv.DictReader(f))
 
     calls = [route(r["question"]) for r in rows]
-    results = [grade(r, c) for r, c in zip(rows, calls)]
+    results = [grade(r, c) for r, c in zip(rows, calls, strict=False)]
 
     passed = sum(1 for r in results if r["passed"])
     total = len(results)

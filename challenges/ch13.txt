@@ -1,0 +1,43 @@
+Challenge 13: Close the loop on one metric
+===========================================
+Paired with Chapter 13 (Use of Spies) and chapters/13-use-of-spies/
+
+Context
+-------
+Chapter 13 closes the loop: feedback from production updates the
+eval, which updates the spec, which updates the prompt. The example
+in chapters/13-use-of-spies/ uses DSPy to optimise a prompt against
+Ragas metrics on a held-out dataset.
+
+Challenge
+---------
+1. Run `python chapters/13-use-of-spies/run-eval.py`. Note the
+   baseline score.
+2. Pick one metric from Ragas that you believe matters for your real
+   domain (faithfulness, answer_relevance, context_precision). Read
+   how it is computed.
+3. Run the DSPy optimiser for one pass. Note the new score and the
+   prompt delta.
+4. Re-read the prompt delta. Can you articulate why it works? If you
+   cannot, the optimisation is brittle and you do not understand
+   your own system.
+5. Add a held-out test case the optimiser did not see. Confirm the
+   improved prompt generalises. If it regresses, the loop overfit.
+
+Constraints
+-----------
+- Do not tune the metric to make the score go up. The metric is the
+  specification of what good means.
+- The held-out case must come from the real world, not the training
+  distribution.
+
+Success criterion
+-----------------
+A before-and-after score, a readable explanation of the prompt
+change, and a passing held-out case. Three artefacts, one notebook.
+
+Where to compare
+----------------
+If the optimiser just added more verbosity, the metric rewards
+verbosity and the loop is broken. Pick a metric that punishes
+waffle and run again.

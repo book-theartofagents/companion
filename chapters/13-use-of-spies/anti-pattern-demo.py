@@ -85,7 +85,7 @@ def main() -> None:
     print("=== Chapter 13: Anti-Pattern (Vibes-Driven Loop) ===")
     print(f"Dataset size used for regression: {runs[0].dataset_size}  (should be >= 20)")
     print(f"Launch score (never refreshed):   {launch_score:.2f}  (stuck on the slide)")
-    print(f"Judge calibrated against humans:  no")
+    print("Judge calibrated against humans:  no")
     print()
 
     print("-- Releases (six months, no regression) --")
@@ -105,11 +105,11 @@ def main() -> None:
     print()
 
     print("-- Uncalibrated judge scores --")
-    for row, score in zip(rows, verbose_scores):
+    for row, score in zip(rows, verbose_scores, strict=False):
         print(f"  {row['scenario_id']}  judge_score={score:.2f}  ({len(row['reference_answer']):>3d} char reference)")
     print()
     print(f"Judge rewards length. Longest answers get {max(verbose_scores):.2f}.")
-    print(f"User satisfaction does not move. The team optimises for the judge.")
+    print("User satisfaction does not move. The team optimises for the judge.")
     print()
 
     print("Three shapes in one team (Ch. 13):")

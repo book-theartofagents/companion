@@ -23,7 +23,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 HERE = Path(__file__).parent
-CHAPTERS_DIR = HERE.parent  # book/companion/chapters/
+CHAPTERS_DIR = HERE.parent  # companion/chapters/
 
 # The four starter practices from the epilogue.
 STARTER_FILES = {

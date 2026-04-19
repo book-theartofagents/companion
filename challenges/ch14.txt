@@ -1,0 +1,46 @@
+Challenge 14: Write the framework obituary
+===========================================
+Paired with Chapter 14 (Interlude: Terrain Shifts) and chapters/14-interlude-terrain-shifts/
+
+Context
+-------
+Chapter 14 is the interlude that looks at framework ecology. LangChain,
+LangGraph, AWS Strands, Dify, LlamaIndex, Vanna, Temporal, Instructor,
+Outlines, BAML, MCP. Each is useful; each will be replaced. The
+example in chapters/14-interlude-terrain-shifts/ runs a small survey
+of the April 2026 landscape and shows what to keep when the names
+change.
+
+Challenge
+---------
+1. Run `python chapters/14-interlude-terrain-shifts/run-eval.py`.
+   Read the survey output.
+2. Pick one framework you used two years ago that is now dormant or
+   replaced. Write its obituary in three sentences: what problem it
+   solved, why it lost, what the replacement kept.
+3. Pick one framework from this chapter you believe will be
+   replaced within 18 months. Justify in one sentence.
+4. Now the harder step: identify the invariant underneath both the
+   old and the new framework. That invariant is the thing to keep
+   in your head; everything else is vocabulary.
+5. Write the invariant as a one-line sentence that would still be
+   true in 2030.
+
+Constraints
+-----------
+- Your invariant must be a claim about systems, not about vendors.
+  "You need logs" is an invariant; "you need Datadog" is not.
+- No obituary longer than three sentences.
+
+Success criterion
+-----------------
+One obituary, one prediction, one invariant. Tape the invariant
+above your monitor. If you find yourself rewriting it in a year,
+you had it wrong.
+
+Where to compare
+----------------
+If your invariant reads like a product description, it is too
+specific. If it reads like "software should be good", it is too
+abstract. Aim for mid-altitude: specific enough to act on, general
+enough to survive a rewrite.

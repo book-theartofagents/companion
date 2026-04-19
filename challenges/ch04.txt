@@ -1,0 +1,42 @@
+Challenge 4: Put a schema between you and the model
+====================================================
+Paired with Chapter 4 (Tactical Dispositions) and chapters/04-tactical-dispositions/
+
+Context
+-------
+Chapter 4 is about schema defence. Instructor, Outlines, and BAML each
+enforce a typed output contract at the boundary. The example in
+chapters/04-tactical-dispositions/ uses pydantic to validate structured
+output from a mocked model.
+
+Challenge
+---------
+1. Read spec.md. List the fields the output schema requires.
+2. Write a malformed sample (missing one required field, one field with
+   the wrong type) and feed it through the validator in run-eval.py.
+   Observe the typed exception.
+3. Extend the schema with one new field. Choose a field that has a
+   non-trivial invariant (a regex on an ID format, a bounded integer,
+   an enum).
+4. Add a scenario to the golden dataset that exercises the new
+   invariant both ways (valid and invalid).
+5. Run the evals. Confirm the new row fails loudly on the invalid case.
+
+Constraints
+-----------
+- The validator must reject the bad input with a typed exception, not
+  return a default. Silent coercion is the anti-pattern.
+- Your new field must have a real invariant. `Optional[str]` with no
+  rule teaches nothing.
+
+Success criterion
+-----------------
+`python chapters/04-tactical-dispositions/run-eval.py` passes the valid
+row and fails on the invalid row with a clear validation error that
+names the field and the rule.
+
+Where to compare
+----------------
+A schema that coerces on failure is worse than no schema: it lies about
+the data. If your test output shows coerced fields instead of a raised
+exception, rework the validator.

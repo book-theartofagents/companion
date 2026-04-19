@@ -331,7 +331,7 @@ def grade(row: dict, result: TriageResult | None, raised: BaseException | None) 
         "attempts": len(result.attempts),
         "category": result.triage.category,
         "priority": result.triage.priority,
-        "reason": "ok" if passed else f"attempts/category/priority mismatch",
+        "reason": "ok" if passed else "attempts/category/priority mismatch",
     }
 
 

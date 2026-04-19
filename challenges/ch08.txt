@@ -1,0 +1,43 @@
+Challenge 8: Pick the wrong formation on purpose
+=================================================
+Paired with Chapter 8 (Variation in Tactics) and chapters/08-variation-in-tactics/
+
+Context
+-------
+Chapter 8 maps four formations: single-agent, pipeline, router, and
+swarm. Each fits a different shape of problem. The example in
+chapters/08-variation-in-tactics/ runs the same task through all four
+and shows the cost and accuracy trade-offs.
+
+Challenge
+---------
+1. Run `python chapters/08-variation-in-tactics/run-eval.py`. Read the
+   four formation outputs and the summary table.
+2. For each formation, write one sentence describing the shape of
+   problem it fits best.
+3. Invert the recommendation: take a scenario where the router is
+   correct and force it through the swarm. Measure the cost. Observe
+   what the swarm does with work that did not need four agents.
+4. Now take a scenario where the swarm was recommended and force it
+   through the single agent. Watch it degrade or fail.
+5. In your notes, state the threshold at which swarm stops being
+   overkill. Pick one metric: tokens, accuracy, wall time.
+
+Constraints
+-----------
+- Use the exact formations shipped in the chapter. Do not invent a
+  fifth.
+- Your threshold must be a number a colleague could apply without
+  re-reading the chapter.
+
+Success criterion
+-----------------
+A one-page decision table: formation, best fit in one sentence, cost
+at baseline, what breaks when you force it. Bring it to your next
+planning meeting.
+
+Where to compare
+----------------
+If your notes say "it depends", you have not picked a threshold. The
+point of the formations is that defaults are cheap and defaults are
+wrong often. Commit to a number.

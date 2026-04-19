@@ -154,7 +154,7 @@ def main() -> None:
     print("Why the fail-open handler hides everything:")
     print("  - Nine distinct failure modes compressed into one reply.")
     print("  - No recovery strategy per mode; every mode gets the same abort.")
-    print(f"  - Three modes never raised at all: ambiguous_input, adversarial_input, silent_wrong_answer.")
+    print("  - Three modes never raised at all: ambiguous_input, adversarial_input, silent_wrong_answer.")
     print("    Those reach the user as confident plausible text. The user acts on them.")
     print("  - Dashboard reports 100% availability because the try/except eats the evidence.")
     print()

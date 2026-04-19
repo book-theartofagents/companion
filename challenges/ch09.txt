@@ -1,0 +1,45 @@
+Challenge 9: Stage a rollout that can roll back
+================================================
+Paired with Chapter 9 (Army on the March) and chapters/09-army-on-the-march/
+
+Context
+-------
+Chapter 9 is staged rollout. An agent change goes live to 1 percent,
+then 10, then 100, gated by evals and observability. The example in
+chapters/09-army-on-the-march/ models the gate as a config file and
+checks it before every rollout step.
+
+Challenge
+---------
+1. Run `python chapters/09-army-on-the-march/run-eval.py` with the
+   current guardrail config. Note which scenarios pass and which gate
+   the rollout.
+2. Make a behavioural change to the agent (new prompt, new tool, new
+   threshold). Run the evals again. Observe whether the change would
+   be gated at 1 percent, 10 percent, or all the way to 100.
+3. Define the rollback signal. What metric, threshold, and window
+   would you use to automatically abort the rollout? Write it as a
+   new field in guardrail-config.yaml.
+4. Simulate a regression: deliberately break one scenario and confirm
+   your rollback signal fires.
+5. Revert the regression and confirm the rollout continues.
+
+Constraints
+-----------
+- The rollback signal must be automatic. A dashboard a human reads is
+  not a signal.
+- The window must be short enough to limit blast radius. Rolling back
+  after a week of bad behaviour is not rolling back.
+
+Success criterion
+-----------------
+A guardrail-config.yaml diff with your new rollback field, a passing
+run under normal conditions, and a visible rollback under the
+simulated regression. All three in one log.
+
+Where to compare
+----------------
+If the rollback signal only fires after you had lost customers, your
+window is wrong. If it fires on every benign change, your threshold
+is wrong. The signal is correct when it alerts on what you would have
+alerted on by hand, faster.

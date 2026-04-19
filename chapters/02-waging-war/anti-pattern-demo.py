@@ -122,7 +122,7 @@ def main() -> None:
     print("  run-eval.py          (gateway pattern)  ~ USD 0.20 for 10 calls.")
     print(f"  anti-pattern-demo.py (uncapped agent)   USD {total_cost:.2f} for 10 calls.")
     print()
-    print(f"At production scale (300k tickets/wk), this is the $83k/month invoice from the book.")
+    print("At production scale (300k tickets/wk), this is the $83k/month invoice from the book.")
 
 
 if __name__ == "__main__":

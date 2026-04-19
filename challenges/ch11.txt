@@ -1,0 +1,43 @@
+Challenge 11: Fail loud, recover cheap
+=======================================
+Paired with Chapter 11 (Nine Situations) and chapters/11-nine-situations/
+
+Context
+-------
+Chapter 11 enumerates failure modes: hallucination, infinite loops,
+tool unavailability, malformed output, adversarial input, permission
+drift. The example in chapters/11-nine-situations/ runs the agent
+through each failure shape and shows the guardrail that catches it.
+
+Challenge
+---------
+1. Run `python chapters/11-nine-situations/run-eval.py`. For each
+   failure mode, note the guardrail that caught it.
+2. Pick one failure mode whose guardrail you consider too strict (it
+   blocks real work) and one you consider too loose (it lets real
+   failures through). Justify each in one sentence.
+3. Tune the strict guardrail until it blocks only the true positives
+   from the golden dataset. Tune the loose one until it catches the
+   false negatives.
+4. Confirm both tuned guardrails preserve the other ten failure modes
+   they were not meant to change.
+5. Write a short note on the trade-off between precision and recall
+   for safety-critical guardrails. When do you prefer each?
+
+Constraints
+-----------
+- A guardrail that blocks everything passes the loose test but fails
+  every real scenario. Precision and recall are both measured.
+- Do not disable a guardrail to make a scenario pass. Tune or
+  replace.
+
+Success criterion
+-----------------
+All golden-dataset scenarios pass with the tuned guardrails. Your
+note is concrete enough that a reviewer can apply the reasoning to a
+new failure mode without re-deriving it.
+
+Where to compare
+----------------
+A guardrail without a metric is a suggestion. If your tuning was
+gut-feel, tighten the measurement before the next pass.

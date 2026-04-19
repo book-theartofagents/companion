@@ -9,7 +9,7 @@ If a chapter in the book teaches a pattern, the folder with the same number give
 **macOS / Linux (bash):**
 
 ```bash
-cd book/companion
+cd companion
 bash scripts/setup.sh
 python scripts/run_all.py
 ```
@@ -17,7 +17,7 @@ python scripts/run_all.py
 **Windows (PowerShell):**
 
 ```powershell
-cd book\companion
+cd companion
 powershell -ExecutionPolicy Bypass -File scripts\setup.ps1
 python scripts\run_all.py
 ```
@@ -25,7 +25,7 @@ python scripts\run_all.py
 **Any platform with Docker:**
 
 ```bash
-cd book/companion
+cd companion
 docker build -t aoa-companion .
 docker run --rm aoa-companion
 ```
@@ -43,7 +43,7 @@ No API keys. No cloud account. No Redis. No Temporal server. Every example is se
 ## Repository layout
 
 ```
-book/companion/
+companion/
 ├── README.md                    This file
 ├── CONTRIBUTING.md              How to add chapters, style rules
 ├── LICENSE                      MIT
