@@ -59,34 +59,31 @@ forbidden_phrases:
   - "I cannot say for sure"
 ```
 
-## C. Proefballon Integration
+## C. Proefballon Integration (planned)
 
-The companion repository is designed to integrate with Proefballon:
-
-1. Each chapter's implementation can be deployed as an ephemeral experiment
-2. Feedback widgets are injected into preview URLs
-3. Learnings are automatically synthesized when experiments expire
-4. Results are stored in the Commons knowledge layer
+Planned integration with the Proefballon platform is tracked in `LATER.md`. Nothing is wired up in this version of the companion. When the integration lands, each chapter's implementation becomes deployable as an ephemeral experiment with feedback capture and a synthesised learning on expiry.
 
 ## D. Sun Tzu Chapter Mapping
 
-| Chapter | Sun Tzu Principle | Companion Implementation |
-|--------|-------------------|--------------------------|
-| 1 | Laying Plans | Spec-driven design |
-| 2 | Waging War | Use terrain to your advantage (choose right tool) |
-| 3 | Attack by Stratagem | Optimize for context efficiency |
-| 4 | Tactical Dispositions | Design for feedback loops |
-| 5 | Energy | Minimize wasted effort |
-| 6 | Weak Points and Strong | Exploit vulnerabilities, avoid strengths |
-| 7 | Manoeuvring | Adapt to changing conditions |
-| 8 | Variation in Tactics | Flexible response strategies |
-| 9 | Army on the March | Efficient resource movement |
-| 10 | Terrain | Match tools to context |
-| 11 | Nine Situations | Context-aware decision making |
-| 12 | Attack by Fire | Use leverage for maximum impact |
-| 13 | Use of Spies | Information gathering and validation |
-| 14 | Interlude: Terrain Shifts | Adapt when context changes |
-| 15 | Epilogue | Knowledge compounds across products |
+Exact mapping used by the book. Principles here must match the ones in `book/outline.md` and the book's Map page.
+
+| Chapter | Sun Tzu | Agent Principle |
+|---|---|---|
+| 1 | Laying Plans | Spec-Driven Design |
+| 2 | Waging War | Token Economics |
+| 3 | Attack by Stratagem | Composability |
+| 4 | Tactical Dispositions | Schema as Defence |
+| 5 | Energy | Tool Design |
+| 6 | Weak Points and Strong | Observability |
+| 7 | Manoeuvring | Adaptive Orchestration |
+| 8 | Variation in Tactics | Multi-Agent Patterns |
+| 9 | The Army on the March | Deployment and Ops |
+| 10 | Terrain | Enterprise Terrain |
+| 11 | The Nine Situations | Failure Modes |
+| 12 | The Attack by Fire | When Not to Use AI |
+| 13 | The Use of Spies | Feedback Loops |
+| 14 | Interlude: Terrain Shifts | Framework evolution |
+| 15 | Epilogue | The Victorious Agent |
 
 ## E. Glossary
 

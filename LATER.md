@@ -38,7 +38,7 @@ Each template includes:
 Connect the companion repository to the Proefballon platform:
 - Allow users to deploy chapters as ephemeral experiments
 - Inject feedback widgets into generated previews
-- Automatically synthesize learnings when experiments expire
+- Automatically synthesise learnings when experiments expire
 - Connect to the Commons knowledge layer
 
 ## 5. Multi-tenancy Support
